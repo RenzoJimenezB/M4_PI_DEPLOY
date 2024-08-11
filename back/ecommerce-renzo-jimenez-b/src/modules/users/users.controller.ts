@@ -10,8 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './users.interface';
-import { CreateUserDto } from './createUser.dto';
+import { CreateUserDto } from './CreateUserDto';
 
 @Controller('users')
 export class UsersController {
@@ -19,7 +18,7 @@ export class UsersController {
 
   @HttpCode(200)
   @Get()
-  findAll(@Query('page') page?: number, @Query('limit') limit?: number) {
+  findAll() {
     return this.usersService.getUsers();
   }
 

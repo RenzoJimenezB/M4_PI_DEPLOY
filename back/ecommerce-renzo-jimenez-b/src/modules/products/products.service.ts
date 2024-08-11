@@ -2,8 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Product } from './products.interface';
 import { plainToInstance } from 'class-transformer';
-import { CreateProductDto } from './createProduct.dto';
-import { validateOrReject } from 'class-validator';
+import { CreateProductDto } from './CreateProductDto';
+import { validateData } from 'src/helpers/validateData';
 
 @Injectable()
 export class ProductsService {
@@ -21,13 +21,11 @@ export class ProductsService {
     const productDto = plainToInstance(CreateProductDto, createProductDto);
 
     try {
-      await validateOrReject(productDto);
+      await validateData(productDto);
       return this.productsRepository.createProduct(productDto);
-    } catch (errors) {
-      throw new BadRequestException('Validation failed', errors);
+    } catch (error) {
+      throw error;
     }
-
-    // return this.productsRepository.createProduct(product);
   }
 
   updateProduct(id: number) {

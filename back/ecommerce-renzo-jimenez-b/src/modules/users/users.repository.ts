@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './users.interface';
-import { UserDto } from './user.dto';
-import { CreateUserDto } from './createUser.dto';
+import { UserDto } from './UserDto';
+import { CreateUserDto } from './CreateUserDto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -45,11 +45,6 @@ export class UsersRepository {
       return userDto;
     });
     return users;
-
-    // const usersWithoutPassword = this.users.map(
-    //   ({ password, ...userWithoutPassword }) => userWithoutPassword,
-    // );
-    // return usersWithoutPassword;
   }
 
   async getById(id: number) {
@@ -62,7 +57,6 @@ export class UsersRepository {
   async createUser(createUserDto: CreateUserDto) {
     const id = this.users.length + 1;
     this.users = [...this.users, { id, ...createUserDto }];
-    // return { id, ...user };
     return { id };
   }
 

@@ -7,10 +7,10 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { Product } from './products.interface';
-import { CreateProductDto } from './createProduct.dto';
+import { CreateProductDto } from './CreateProductDto';
 
 @Controller('products')
 export class ProductsController {
@@ -18,7 +18,7 @@ export class ProductsController {
 
   @HttpCode(200)
   @Get()
-  findAll() {
+  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
     return this.productsService.getProducts();
   }
 
@@ -30,8 +30,8 @@ export class ProductsController {
 
   @HttpCode(201)
   @Post()
-  create(@Body() createProduct: CreateProductDto) {
-    return this.productsService.createProduct(createProduct);
+  create(@Body() createProductDto: CreateProductDto) {
+    return this.productsService.createProduct(createProductDto);
   }
 
   @HttpCode(200)

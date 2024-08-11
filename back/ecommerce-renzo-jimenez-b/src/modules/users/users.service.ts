@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from './users.interface';
-import { UserDto } from './user.dto';
-import { CreateUserDto } from './createUser.dto';
-import { validateOrReject } from 'class-validator';
+import { UserDto } from './UserDto';
+import { CreateUserDto } from './CreateUserDto';
 import { plainToInstance } from 'class-transformer';
+import { validateData } from 'src/helpers/validateData';
 
 @Injectable()
 export class UsersService {
@@ -19,14 +19,13 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    // const userDto = Object.assign(new CreateUserDto(), createUserDto);
     const userDto = plainToInstance(CreateUserDto, createUserDto);
 
     try {
-      await validateOrReject(userDto);
+      await validateData(userDto);
       return this.usersRepository.createUser(userDto);
-    } catch (errors) {
-      throw new BadRequestException('Validation failed', errors);
+    } catch (error) {
+      throw error;
     }
   }
 
