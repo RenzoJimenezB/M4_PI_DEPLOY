@@ -9,8 +9,8 @@ import { validateData } from 'src/helpers/validateData';
 export class ProductsService {
   constructor(private productsRepository: ProductsRepository) {}
 
-  getProducts(): Promise<Product[]> {
-    return this.productsRepository.getProducts();
+  getProducts(page: number, limit: number): Promise<Product[]> {
+    return this.productsRepository.getProducts(page, limit);
   }
 
   getProductById(id: number): Promise<Product> {

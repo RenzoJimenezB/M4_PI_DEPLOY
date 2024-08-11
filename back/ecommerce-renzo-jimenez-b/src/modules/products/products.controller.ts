@@ -18,8 +18,8 @@ export class ProductsController {
 
   @HttpCode(200)
   @Get()
-  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
-    return this.productsService.getProducts();
+  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 5) {
+    return this.productsService.getProducts(page, limit);
   }
 
   @HttpCode(200)

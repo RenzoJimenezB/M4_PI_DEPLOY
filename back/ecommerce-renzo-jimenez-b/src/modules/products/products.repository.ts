@@ -39,8 +39,14 @@ export class ProductsRepository {
     },
   ];
 
-  async getProducts() {
-    return this.products;
+  async getProducts(page: number, limit: number) {
+    // return this.products;
+
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    console.log(`returning items from indices ${start} to ${end - 1}`);
+
+    return this.products.slice(start, end);
   }
 
   async getById(id: number) {

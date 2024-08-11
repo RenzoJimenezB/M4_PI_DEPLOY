@@ -54,6 +54,11 @@ export class UsersRepository {
     return userDto;
   }
 
+  async findByEmail(email: string) {
+    return this.users.find((user) => user.email === email);
+  }
+  // return user without password?
+
   async createUser(createUserDto: CreateUserDto) {
     const id = this.users.length + 1;
     this.users = [...this.users, { id, ...createUserDto }];

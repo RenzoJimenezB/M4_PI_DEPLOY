@@ -1,9 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
 import { validateOrReject, ValidationError } from 'class-validator';
+import { AuthDto } from 'src/modules/auth/AuthDto';
 import { CreateProductDto } from 'src/modules/products/CreateProductDto';
 import { CreateUserDto } from 'src/modules/users/CreateUserDto';
 
-type ValidationInput = CreateUserDto | CreateProductDto;
+type ValidationInput = CreateUserDto | CreateProductDto | AuthDto;
 
 export async function validateData(data: ValidationInput) {
   try {
