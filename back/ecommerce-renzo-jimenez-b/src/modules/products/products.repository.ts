@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { Product } from './products.interface';
+import { CreateProductDto } from './createProduct.dto';
 
 @Injectable()
 export class ProductsRepository {
-  private products = [
+  private products: Product[] = [
     {
       id: 1,
       name: 'product 1',
@@ -39,5 +41,31 @@ export class ProductsRepository {
 
   async getProducts() {
     return this.products;
+  }
+
+  async getById(id: number) {
+    return this.products.find((product) => product.id === id);
+  }
+
+  async createProduct(createProductDto: CreateProductDto) {
+    const id = this.products.length + 1;
+    this.products = [
+      ...this.products,
+      {
+        id,
+        ...createProductDto,
+        stock: true,
+      },
+    ];
+    // return { id, ...product };
+    return { id };
+  }
+
+  async updateProduct(id: number) {
+    return `Product with id ${id} has been updated`;
+  }
+
+  async deleteProduct(id: number) {
+    return `Product with id ${id} has been deleted`;
   }
 }

@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { User } from './users.interface';
+import { UserDto } from './user.dto';
+import { CreateUserDto } from './createUser.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersRepository {
-  private users = [
+  private users: User[] = [
     {
       id: 1,
       name: 'Manel',
@@ -10,8 +14,8 @@ export class UsersRepository {
       password: 'manel123',
       address: 'address 1',
       phone: 'phone 1',
-      country: 'España',
-      city: undefined,
+      // country: 'España',
+      // city: undefined,
     },
     {
       id: 2,
@@ -20,8 +24,8 @@ export class UsersRepository {
       password: 'pau123',
       address: 'address 2',
       phone: 'phone 2',
-      country: 'España',
-      city: undefined,
+      // country: 'España',
+      // city: undefined,
     },
     {
       id: 3,
@@ -30,12 +34,43 @@ export class UsersRepository {
       password: 'guillem123',
       address: 'address 3',
       phone: 'phone 3',
-      country: 'España',
-      city: undefined,
+      // country: 'España',
+      // city: undefined,
     },
   ];
 
   async getUsers() {
-    return this.users;
+    const users = this.users.map((user) => {
+      const userDto = plainToInstance(UserDto, user);
+      return userDto;
+    });
+    return users;
+
+    // const usersWithoutPassword = this.users.map(
+    //   ({ password, ...userWithoutPassword }) => userWithoutPassword,
+    // );
+    // return usersWithoutPassword;
+  }
+
+  async getById(id: number) {
+    const user = this.users.find((user) => user.id === id);
+    const userDto = plainToInstance(UserDto, user);
+
+    return userDto;
+  }
+
+  async createUser(createUserDto: CreateUserDto) {
+    const id = this.users.length + 1;
+    this.users = [...this.users, { id, ...createUserDto }];
+    // return { id, ...user };
+    return { id };
+  }
+
+  async updateUser(id: number) {
+    return `User with id ${id} has been updated`;
+  }
+
+  async deleteUser(id: number) {
+    return `User with id ${id} has been deleted`;
   }
 }
