@@ -19,12 +19,12 @@ export class AuthService {
       await validateData(credentials);
       const user = await this.usersRepository.findByEmail(credentials.email);
       if (!user) {
-        throw new BadRequestException('Invalid email or password');
+        throw new BadRequestException('Email o password incorrectos');
       }
 
       const isPasswordValid = user.password === credentials.password;
       if (!isPasswordValid) {
-        throw new BadRequestException('Invalid email or password');
+        throw new BadRequestException('Email o password incorrectos');
       }
 
       return user;
