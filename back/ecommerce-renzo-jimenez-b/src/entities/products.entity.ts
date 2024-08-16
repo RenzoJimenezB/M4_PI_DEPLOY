@@ -1,5 +1,5 @@
-import { Category } from 'src/entities/categories.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Category } from './categories.entity';
 import { v4 as uuid } from 'uuid';
 
 @Entity({

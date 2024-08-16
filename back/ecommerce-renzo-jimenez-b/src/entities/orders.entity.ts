@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { OrderDetail } from './orderDetails.entity';
 import { User } from './users.entity';
+import { OrderDetail } from './orderDetails.entity';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -21,7 +21,7 @@ export class Order {
   @Column({ type: 'date' })
   date: string;
 
-  @OneToOne(() => OrderDetail)
-  @JoinColumn()
-  orderDetail: OrderDetail;
+  // @OneToOne(() => OrderDetail)
+  // @JoinColumn()
+  // orderDetail: OrderDetail;
 }

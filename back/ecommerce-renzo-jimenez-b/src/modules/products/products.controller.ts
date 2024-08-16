@@ -10,8 +10,8 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { CreateProductDto } from './dto/CreateProductDto';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from '../../dto/CreateProductDto';
 import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('products')

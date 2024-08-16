@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './users.interface';
-import { UserDto } from '../../dto/UserDto';
-import { CreateUserDto } from '../../dto/CreateUserDto';
+import { UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -59,11 +59,11 @@ export class UsersRepository {
   }
   // return user without password?
 
-  async createUser(createUserDto: CreateUserDto) {
-    const id = this.users.length + 1;
-    this.users = [...this.users, { id, ...createUserDto }];
-    return { id };
-  }
+  // async createUser(createUserDto: CreateUserDto) {
+  //   const id = this.users.length + 1;
+  //   this.users = [...this.users, { id, ...createUserDto }];
+  //   return { id };
+  // }
 
   async updateUser(id: number) {
     return `User with id ${id} has been updated`;
