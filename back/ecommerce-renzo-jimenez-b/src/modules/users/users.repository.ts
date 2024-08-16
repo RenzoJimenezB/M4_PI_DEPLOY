@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './users.interface';
-import { UserDto } from './UserDto';
-import { CreateUserDto } from './CreateUserDto';
+import { UserDto } from '../../dto/UserDto';
+import { CreateUserDto } from '../../dto/CreateUserDto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()

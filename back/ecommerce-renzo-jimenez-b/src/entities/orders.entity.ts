@@ -1,4 +1,3 @@
-import { IsNotEmpty } from 'class-validator';
 import {
   Column,
   Entity,
@@ -8,21 +7,21 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { User } from '../users/users.entity';
-import { OrderDetail } from '../orderDetails/orderDetails.entity';
+import { OrderDetail } from './orderDetails.entity';
+import { User } from './users.entity';
 
 @Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuid();
 
-  @ManyToOne(() => User, (user) => user.orders_id)
-  user_id: User[];
+  @ManyToOne(() => User, (user) => user.orders)
+  user: User;
 
   @Column({ type: 'date' })
   date: string;
 
   @OneToOne(() => OrderDetail)
   @JoinColumn()
-  orderDetails: OrderDetail;
+  orderDetail: OrderDetail;
 }

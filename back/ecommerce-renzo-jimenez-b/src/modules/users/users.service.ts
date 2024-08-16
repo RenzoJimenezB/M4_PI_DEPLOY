@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from './users.interface';
-import { UserDto } from './UserDto';
-import { CreateUserDto } from './CreateUserDto';
+import { UserDto } from '../../dto/UserDto';
+import { CreateUserDto } from '../../dto/CreateUserDto';
 import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 
