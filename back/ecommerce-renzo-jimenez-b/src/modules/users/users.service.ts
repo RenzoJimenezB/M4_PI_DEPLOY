@@ -12,25 +12,15 @@ import { UUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-  ) {}
+  constructor(private usersRepository: UsersRepository) {}
 
   async getUsers(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.usersRepository.findAll();
   }
 
   async getUserById(id: UUID): Promise<User> {
-    return this.usersRepository.findOne({
-      where: { id },
-      relations: {
-        orders: false,
-        // ORDERS!!!
-      },
-    });
+    return this.usersRepository.findOneById(id);
   }
-  // RETURN USER with ORDERS ARRAY (only id and date properties, exclude userId)
 
   async createUser(createUserDto: CreateUserDto) {
     const userDto = plainToInstance(CreateUserDto, createUserDto);
@@ -43,11 +33,11 @@ export class UsersService {
     }
   }
 
-  // updateUser(id: number) {
-  //   return this.usersRepository.updateUser(id);
-  // }
+  updateUser(id: number) {
+    return this.usersRepository.updateUser(id);
+  }
 
-  // deleteUser(id: number) {
-  //   return this.usersRepository.deleteUser(id);
-  // }
+  deleteUser(id: number) {
+    return this.usersRepository.deleteUser(id);
+  }
 }

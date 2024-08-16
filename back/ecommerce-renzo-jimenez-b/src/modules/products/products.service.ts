@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Product } from './products.interface';
 import { plainToInstance } from 'class-transformer';
-import { CreateProductDto } from './dto/CreateProductDto';
+import { CreateProductDto } from './dto/create-product.dto';
 import { validateData } from 'src/helpers/validateData';
 
 @Injectable()

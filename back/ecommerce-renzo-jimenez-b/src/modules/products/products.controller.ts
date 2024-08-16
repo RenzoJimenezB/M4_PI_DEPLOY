@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { CreateProductDto } from './dto/CreateProductDto';
+import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '../auth/auth.guard';
 

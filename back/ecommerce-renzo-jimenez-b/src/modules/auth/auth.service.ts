@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { AuthDto } from './AuthDto';
+import { AuthDto } from './dto/auth.dto';
 import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 import { UsersRepository } from '../users/users.repository';

@@ -40,17 +40,17 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
-  // @HttpCode(200)
-  // @Put(':id')
-  // @UseGuards(AuthGuard)
-  // updateUser(@Param('id') id: string) {
-  //   return this.usersService.updateUser(Number(id));
-  // }
+  @HttpCode(200)
+  @Put(':id')
+  @UseGuards(AuthGuard)
+  updateUser(@Param('id') id: string) {
+    return this.usersService.updateUser(Number(id));
+  }
 
-  // @HttpCode(200)
-  // @Delete(':id')
-  // @UseGuards(AuthGuard)
-  // deleteUser(@Param('id') id: string) {
-  //   return this.usersService.deleteUser(Number(id));
-  // }
+  @HttpCode(200)
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  deleteUser(@Param('id') id: string) {
+    return this.usersService.deleteUser(Number(id));
+  }
 }

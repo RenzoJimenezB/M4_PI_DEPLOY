@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
 import { validateOrReject, ValidationError } from 'class-validator';
-import { AuthDto } from 'src/modules/auth/AuthDto';
-import { CreateProductDto } from 'src/modules/products/dto/CreateProductDto';
+import { AuthDto } from 'src/modules/auth/dto/auth.dto';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { CreateProductDto } from 'src/modules/products/dto/create-product.dto';
 
 type ValidationInput = CreateUserDto | CreateProductDto | AuthDto;
 
