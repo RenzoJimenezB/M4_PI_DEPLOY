@@ -1,4 +1,4 @@
-const preloadedCategories = [
+export const preloadedCategories = [
   {
     name: 'keyboard',
   },
@@ -13,7 +13,7 @@ const preloadedCategories = [
   },
 ];
 
-const preloadedProducts = [
+export const preloadedProducts = [
   {
     name: 'Iphone 15',
     description: 'The best smartphone in the world',

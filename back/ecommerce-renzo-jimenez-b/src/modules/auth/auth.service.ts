@@ -18,6 +18,7 @@ export class AuthService {
     try {
       await validateData(credentials);
       const user = await this.usersRepository.findByEmail(credentials.email);
+      // call method in Repo or Service?
       if (!user) {
         throw new BadRequestException('Email o password incorrectos');
       }

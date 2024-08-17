@@ -53,8 +53,7 @@ export class UsersRepository {
   async findOneById(id: UUID): Promise<User> {
     return this.repository.findOne({
       where: { id },
-      relations: { orders: false },
-      // ORDERS!!!
+      relations: { orders: true },
     });
   }
   // RETURN USER with ORDERS ARRAY (only id and date properties, exclude userId)

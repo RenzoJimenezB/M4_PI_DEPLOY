@@ -1,5 +1,6 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Controller('categories')
 export class CategoriesController {
@@ -10,8 +11,8 @@ export class CategoriesController {
     return this.categoriesService.getCategories();
   }
 
-  //   @Post('seeder')
-  //   create() {
-  //     return this.categoriesService.addCategories();
-  //   }
+  @Post('seeder')
+  seedCategories(@Body() categories: CreateCategoryDto[]) {
+    return this.categoriesService.seedCategories(categories);
+  }
 }

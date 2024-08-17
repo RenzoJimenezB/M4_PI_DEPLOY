@@ -13,6 +13,8 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { UUID } from 'crypto';
+import { Product } from 'src/entities/products.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -26,8 +28,8 @@ export class ProductsController {
 
   @HttpCode(200)
   @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.productsService.getProductById(Number(id));
+  findById(@Param('id') id: UUID) {
+    return this.productsService.getProductById(id);
   }
 
   @HttpCode(201)
@@ -35,6 +37,11 @@ export class ProductsController {
   @UseGuards(AuthGuard)
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.createProduct(createProductDto);
+  }
+
+  @Post('seeder')
+  seedProducts(@Body() products: CreateProductDto[]) {
+    return this.productsService.seedProducts(products);
   }
 
   @HttpCode(200)
