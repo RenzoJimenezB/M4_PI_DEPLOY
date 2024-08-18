@@ -3,8 +3,13 @@ import { validateOrReject, ValidationError } from 'class-validator';
 import { AuthDto } from 'src/modules/auth/dto/auth.dto';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 import { CreateProductDto } from 'src/modules/products/dto/create-product.dto';
+import { CreateOrderDto } from 'src/modules/orders/dto/create-order.dto';
 
-type ValidationInput = CreateUserDto | CreateProductDto | AuthDto;
+type ValidationInput =
+  | AuthDto
+  | CreateUserDto
+  | CreateProductDto
+  | CreateOrderDto;
 
 export async function validateData(data: ValidationInput) {
   try {

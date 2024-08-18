@@ -28,15 +28,15 @@ export class ProductsController {
 
   @HttpCode(200)
   @Get(':id')
-  findById(@Param('id') id: UUID) {
+  findById(@Param('id') id: string) {
     return this.productsService.getProductById(id);
   }
 
   @HttpCode(201)
   @Post()
   @UseGuards(AuthGuard)
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.createProduct(createProductDto);
+  create(@Body() product: CreateProductDto) {
+    return this.productsService.createProduct(product);
   }
 
   @Post('seeder')
@@ -47,8 +47,8 @@ export class ProductsController {
   @HttpCode(200)
   @Put(':id')
   @UseGuards(AuthGuard)
-  updateProduct(@Param('id') id: string) {
-    return this.productsService.updateProduct(Number(id));
+  updateProduct(@Param('id') id: string, @Body() updateData: Partial<Product>) {
+    return this.productsService.updateProduct(id, updateData);
   }
 
   @HttpCode(200)

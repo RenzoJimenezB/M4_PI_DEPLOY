@@ -25,16 +25,16 @@ export class ProductsService {
   //   return data;
   // }
 
-  getProductById(id: UUID): Promise<Product> {
+  getProductById(id: string): Promise<Product> {
     return this.productsRepository.findOneById(id);
   }
 
-  async createProduct(createProductDto: CreateProductDto) {
-    const productDto = plainToInstance(CreateProductDto, createProductDto);
+  async createProduct(product: CreateProductDto) {
+    const productDto = plainToInstance(CreateProductDto, product);
 
     try {
       await validateData(productDto);
-      return this.productsRepository.save(productDto);
+      return this.productsRepository.create(productDto);
     } catch (error) {
       throw error;
     }
@@ -44,8 +44,8 @@ export class ProductsService {
     return this.productsRepository.seedProducts(products);
   }
 
-  updateProduct(id: number) {
-    return this.productsRepository.updateProduct(id);
+  updateProduct(id: string, updateData: Partial<Product>) {
+    return this.productsRepository.updateProduct(id, updateData);
   }
 
   deleteProduct(id: number) {

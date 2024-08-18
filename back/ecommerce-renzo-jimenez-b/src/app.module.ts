@@ -19,11 +19,11 @@ import { CategoriesModule } from './modules/categories/categories.module';
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
+    AuthModule,
     UsersModule,
     ProductsModule,
-    OrdersModule,
-    AuthModule,
     CategoriesModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],

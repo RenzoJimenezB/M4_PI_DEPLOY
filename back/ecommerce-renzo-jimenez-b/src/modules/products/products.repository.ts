@@ -12,7 +12,6 @@ export class ProductsRepository {
   constructor(
     @InjectRepository(Product)
     private repository: Repository<Product>,
-
     private categoriesRepository: CategoriesRepository,
   ) {}
   // private products: Product[] = [
@@ -69,25 +68,23 @@ export class ProductsRepository {
     };
   }
 
-  async findOneById(id: UUID): Promise<Product> {
+  async findOneById(id: string): Promise<Product> {
     return this.repository.findOne({
       where: { id },
     });
   }
 
-  async save(createProductDto: CreateProductDto) {
+  async create(product: CreateProductDto) {
     const category = await this.categoriesRepository.findByName(
-      createProductDto.category,
+      product.category,
     );
 
     if (!category) {
-      throw new Error(
-        `Category with name ${createProductDto.category} not found`,
-      );
+      throw new Error(`Category with name ${product.category} not found`);
     }
 
     const newProduct = await this.repository.save({
-      ...createProductDto,
+      ...product,
       category,
     });
     return newProduct.id;
@@ -116,7 +113,13 @@ export class ProductsRepository {
     }
   }
 
-  async updateProduct(id: number) {
+  async updateProduct(id: string, updateData: Partial<Product>) {
+    const product = await this.repository.findOneBy({ id });
+
+    if (product) {
+      Object.assign(product, updateData);
+      await this.repository.save(product);
+    }
     return `Product with id ${id} has been updated`;
   }
 

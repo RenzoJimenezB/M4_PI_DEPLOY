@@ -7,7 +7,6 @@ import { validateData } from 'src/helpers/validateData';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
-import { UUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -17,16 +16,16 @@ export class UsersService {
     return this.usersRepository.findAll();
   }
 
-  async getUserById(id: UUID): Promise<User> {
+  async getUserById(id: string): Promise<User> {
     return this.usersRepository.findOneById(id);
   }
 
-  async createUser(createUserDto: CreateUserDto) {
-    const userDto = plainToInstance(CreateUserDto, createUserDto);
+  async createUser(user: CreateUserDto) {
+    const userDto = plainToInstance(CreateUserDto, user);
 
     try {
       await validateData(userDto);
-      return this.usersRepository.save(userDto);
+      return this.usersRepository.create(userDto);
     } catch (error) {
       throw error;
     }

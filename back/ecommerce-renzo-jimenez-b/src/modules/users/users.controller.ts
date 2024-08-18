@@ -13,7 +13,6 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { UUID } from 'crypto';
 
 @Controller('users')
 export class UsersController {
@@ -29,7 +28,7 @@ export class UsersController {
   @HttpCode(200)
   @Get(':id')
   @UseGuards(AuthGuard)
-  findById(@Param('id') id: UUID) {
+  findById(@Param('id') id: string) {
     // console.log(`searching user with id: ${id}...`);
     return this.usersService.getUserById(id);
   }

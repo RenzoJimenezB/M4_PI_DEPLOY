@@ -5,7 +5,6 @@ import { plainToInstance } from 'class-transformer';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
-import { UUID } from 'crypto';
 
 @Injectable()
 export class UsersRepository {
@@ -50,7 +49,7 @@ export class UsersRepository {
     return this.repository.find();
   }
 
-  async findOneById(id: UUID): Promise<User> {
+  async findOneById(id: string): Promise<User> {
     return this.repository.findOne({
       where: { id },
       relations: { orders: true },
@@ -63,7 +62,7 @@ export class UsersRepository {
     // return user without password?
   }
 
-  async save(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     return this.repository.save(createUserDto);
   }
 
