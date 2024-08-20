@@ -6,6 +6,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { ProductsRepository } from '../products/products.repository';
 import { UsersRepository } from '../users/users.repository';
 import { OrderDetailsRepository } from '../orderDetails/orderDetails.repository';
+import { OrderWithDetailsDto } from './dto/order-with-details.dto';
 
 @Injectable()
 export class OrdersRepository {
@@ -23,9 +24,10 @@ export class OrdersRepository {
     });
   }
 
-  async create(order: CreateOrderDto) {
+  async create(order: CreateOrderDto): Promise<OrderWithDetailsDto> {
     const user = await this.usersRepository.findOneById(order.userId);
     const newOrder = this.repository.create({ user });
+    // add date to order instance (nest lifecycle hook)
     let totalPrice = 0;
     let productsToBeOrdered = [];
 
@@ -38,25 +40,36 @@ export class OrdersRepository {
       if (orderProduct) {
         // update total price (orderDetail)
         totalPrice += orderProduct.price;
+
         // update stock (product)
         const updatedStock = orderProduct.stock - 1;
-        const updatedProduct = await this.productsRepository.updateProduct(
-          orderProduct.id,
-          { stock: Math.max(updatedStock, 0) },
-        );
-        // do not return products with a stock === 0 (productsModule)
-
-        // CREATE and REGISTER an orderDetail with the selected products
-        productsToBeOrdered.push(orderProduct);
-        const orderDetail = await this.orderDetailsRepository.create({
-          products: productsToBeOrdered,
-          price: totalPrice,
-          order: newOrder,
+        await this.productsRepository.updateProduct(orderProduct.id, {
+          stock: Math.max(updatedStock, 0),
         });
 
-        return newOrder;
-        // RETURN order with total price and orderDetail_id
+        productsToBeOrdered.push(orderProduct);
+
+        // PENDING:
+        // do not return products with a stock === 0 (productsModule)
       }
+    }
+    // CREATE and REGISTER an orderDetail with the selected products
+    if (productsToBeOrdered.length > 0) {
+      const orderDetail = await this.orderDetailsRepository.create({
+        products: productsToBeOrdered,
+        price: totalPrice,
+        order: newOrder,
+      });
+
+      // RETURN order with total price and orderDetail_id
+      const orderWithDetails: OrderWithDetailsDto = {
+        order: newOrder,
+        orderDetailId: orderDetail.id,
+        totalPrice: orderDetail.price,
+      };
+      return orderWithDetails;
+    } else {
+      throw new Error('No products were ordered');
     }
   }
 }

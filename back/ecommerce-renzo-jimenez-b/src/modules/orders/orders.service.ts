@@ -6,6 +6,7 @@ import { OrdersRepository } from './orders.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
+import { OrderWithDetailsDto } from './dto/order-with-details.dto';
 
 @Injectable()
 export class OrdersService {
@@ -15,7 +16,7 @@ export class OrdersService {
     return this.ordersRepository.findById(id);
   }
 
-  async addOrder(order: CreateOrderDto) {
+  async addOrder(order: CreateOrderDto): Promise<OrderWithDetailsDto> {
     const orderDto = plainToInstance(CreateOrderDto, order);
 
     try {

@@ -1,23 +1,25 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
-import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
+import { PublicUserDto } from './dto/public-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
-  async getUsers(): Promise<User[]> {
-    return this.usersRepository.findAll();
+  async getUsers(): Promise<PublicUserDto[]> {
+    const users = await this.usersRepository.findAll();
+    return plainToInstance(PublicUserDto, users);
   }
 
-  async getUserById(id: string): Promise<User> {
-    return this.usersRepository.findOneById(id);
+  async getUserById(id: string): Promise<PublicUserDto> {
+    const user = await this.usersRepository.findOneById(id);
+    return plainToInstance(PublicUserDto, user);
   }
 
   async createUser(user: CreateUserDto) {
