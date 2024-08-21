@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -19,7 +20,12 @@ export class Order {
   user: User;
 
   @Column({ type: 'date' })
-  date: string;
+  date: Date;
+
+  @BeforeInsert()
+  assignDefaultDate() {
+    this.date = new Date();
+  }
 
   // @OneToOne(() => OrderDetail)
   // @JoinColumn()

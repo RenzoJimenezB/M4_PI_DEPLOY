@@ -25,9 +25,14 @@ export class OrdersRepository {
   }
 
   async create(order: CreateOrderDto): Promise<OrderWithDetailsDto> {
+    // find user and assign it to a new order
     const user = await this.usersRepository.findOneById(order.userId);
-    const newOrder = this.repository.create({ user });
-    // add date to order instance (nest lifecycle hook)
+
+    // create and save order instance to generate and persist the ID
+    const newOrder = await this.repository.save(
+      this.repository.create({ user }),
+    );
+
     let totalPrice = 0;
     let productsToBeOrdered = [];
 
@@ -37,8 +42,9 @@ export class OrdersRepository {
       const orderProduct = await this.productsRepository.findOneById(
         product.id,
       );
+
       if (orderProduct) {
-        // update total price (orderDetail)
+        // udpate total price (orderDetail)
         totalPrice += orderProduct.price;
 
         // update stock (product)
@@ -48,28 +54,27 @@ export class OrdersRepository {
         });
 
         productsToBeOrdered.push(orderProduct);
-
-        // PENDING:
-        // do not return products with a stock === 0 (productsModule)
       }
     }
-    // CREATE and REGISTER an orderDetail with the selected products
-    if (productsToBeOrdered.length > 0) {
-      const orderDetail = await this.orderDetailsRepository.create({
-        products: productsToBeOrdered,
-        price: totalPrice,
-        order: newOrder,
-      });
 
-      // RETURN order with total price and orderDetail_id
-      const orderWithDetails: OrderWithDetailsDto = {
-        order: newOrder,
-        orderDetailId: orderDetail.id,
-        totalPrice: orderDetail.price,
-      };
-      return orderWithDetails;
-    } else {
+    if (productsToBeOrdered.length === 0) {
       throw new Error('No products were ordered');
     }
+
+    // create and save orderDetail instance
+    const orderDetail = await this.orderDetailsRepository.create({
+      products: productsToBeOrdered,
+      price: totalPrice,
+      order: newOrder,
+    });
+
+    // return order with total price and orderDetail_id
+    const orderWithDetails: OrderWithDetailsDto = {
+      order: newOrder,
+      orderDetailId: orderDetail.id,
+      totalPrice: orderDetail.price,
+    };
+
+    return orderWithDetails;
   }
 }

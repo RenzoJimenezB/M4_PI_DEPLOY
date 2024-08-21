@@ -7,12 +7,12 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Get()
-  getOrder(id: string) {
+  findOne(id: string) {
     return this.ordersService.getOrder(id);
   }
 
   @Post()
-  addOrder(@Body() order: CreateOrderDto) {
+  create(@Body() order: CreateOrderDto) {
     return this.ordersService.addOrder(order);
   }
 }
