@@ -24,6 +24,7 @@ export class ProductsRepository {
     const [results, total] = await this.repository.findAndCount({
       skip,
       take,
+      relations: { category: true },
     });
 
     return {

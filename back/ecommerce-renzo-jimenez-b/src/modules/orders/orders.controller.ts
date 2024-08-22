@@ -7,6 +7,11 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Get()
+  findAll() {
+    return this.ordersService.findAll();
+  }
+
+  @Get(':id')
   findOne(id: string) {
     return this.ordersService.getOrder(id);
   }

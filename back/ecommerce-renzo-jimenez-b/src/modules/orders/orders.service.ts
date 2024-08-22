@@ -12,6 +12,10 @@ import { OrderWithDetailsDto } from './dto/order-with-details.dto';
 export class OrdersService {
   constructor(private ordersRepository: OrdersRepository) {}
 
+  findAll() {
+    return this.ordersRepository.findAll();
+  }
+
   getOrder(id: string): Promise<Order> {
     return this.ordersRepository.findById(id);
   }

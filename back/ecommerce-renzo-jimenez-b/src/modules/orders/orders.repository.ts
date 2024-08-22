@@ -18,6 +18,10 @@ export class OrdersRepository {
     private orderDetailsRepository: OrderDetailsRepository,
   ) {}
 
+  async findAll() {
+    return await this.repository.find();
+  }
+
   async findById(id: string): Promise<Order> {
     return await this.repository.findOne({
       where: { id },

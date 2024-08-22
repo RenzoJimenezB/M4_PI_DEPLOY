@@ -7,7 +7,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { OrdersModule } from './modules/orders/orders.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
-import { ApisModule } from './apis/apis.module';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { ApisModule } from './apis/apis.module';
     ProductsModule,
     CategoriesModule,
     OrdersModule,
-    ApisModule,
   ],
   controllers: [],
   providers: [],

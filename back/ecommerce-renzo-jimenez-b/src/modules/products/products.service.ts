@@ -17,6 +17,8 @@ export class ProductsService {
   ): Promise<PaginatedProductsDto> {
     // dto?
     return this.productsRepository.findAll(page, limit);
+    // al realizar la busqueda de todos los productos aquellos con stock === 0
+    // no deben ser mostrados
   }
 
   // return data only:
