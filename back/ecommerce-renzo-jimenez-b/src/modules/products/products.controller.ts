@@ -13,7 +13,6 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '../auth/auth.guard';
-import { UUID } from 'crypto';
 import { Product } from 'src/entities/products.entity';
 
 @Controller('products')

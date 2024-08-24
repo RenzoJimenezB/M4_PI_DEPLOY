@@ -14,14 +14,15 @@ dotenvConfig({
 const config = {
   type: 'postgres',
   database: process.env.DB_NAME,
-  host: process.env.DB_host,
+  host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
+  // dropSchema: true,
   autoLoadEntities: true,
   synchronize: true,
   logging: true,
-  entities: [User, Product, Order, OrderDetail, Category],
+  // entities: [User, Product, Order, OrderDetail, Category],
   // entities: ['dist/**/*.entity{.ts,.js'],
   // migrations: ['dist/migrations/*{.ts,.js'],
 };

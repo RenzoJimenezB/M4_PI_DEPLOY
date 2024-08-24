@@ -1,34 +1,43 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Order } from './orders.entity';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 
 @Entity({
   name: 'users',
 })
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 50, nullable: false })
   name: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20, nullable: false })
   password: string;
 
-  @Column()
-  phone: string;
+  @Column({ type: 'int' })
+  phone: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 50 })
   country: string;
 
-  @Column()
+  @Column({ type: 'text' })
   address: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 50 })
   city: string;
+
+  @Column({ type: 'boolean', default: false })
+  isAdmin: boolean;
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];

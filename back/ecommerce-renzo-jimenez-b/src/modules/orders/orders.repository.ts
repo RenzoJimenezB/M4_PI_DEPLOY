@@ -23,9 +23,19 @@ export class OrdersRepository {
   }
 
   async findById(id: string): Promise<Order> {
-    return await this.repository.findOne({
-      where: { id },
-    });
+    // return await this.repository.findOne({
+    //   where: { id },
+    //   relations: {
+    //     orderDetail: true,
+    //   },
+    // });
+    console.log(id);
+
+    return await this.repository
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.orderDetail', 'orderdetail')
+      .where('order.id = :id', { id })
+      .getOne();
   }
 
   async create(order: CreateOrderDto): Promise<OrderWithDetailsDto> {
@@ -33,9 +43,7 @@ export class OrdersRepository {
     const user = await this.usersRepository.findOneById(order.userId);
 
     // create and save order instance to generate and persist the ID
-    const newOrder = await this.repository.save(
-      this.repository.create({ user }),
-    );
+    let newOrder = await this.repository.save(this.repository.create({ user }));
 
     let totalPrice = 0;
     let productsToBeOrdered = [];
@@ -71,6 +79,9 @@ export class OrdersRepository {
       price: totalPrice,
       order: newOrder,
     });
+
+    newOrder.orderDetail = orderDetail;
+    await this.repository.save(newOrder);
 
     // return order with total price and orderDetail_id
     const orderWithDetails: OrderWithDetailsDto = {

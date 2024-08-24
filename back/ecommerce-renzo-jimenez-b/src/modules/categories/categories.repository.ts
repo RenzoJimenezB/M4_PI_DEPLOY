@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/categories.entity';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import * as data from 'src/utils/data.json';
 
 @Injectable()
 // export class CategoriesRepository extends Repository<Category> {
@@ -20,15 +21,15 @@ export class CategoriesRepository {
     return await this.repository.findOne({ where: { name } });
   }
 
-  async addCategories(categories: CreateCategoryDto[]) {
-    for (const category of categories) {
-      const existingCategory = await this.repository.findOne({
-        where: { name: category.name },
-      });
-      if (!existingCategory) {
-        const newCategory = this.repository.create({ name: category.name });
-        await this.repository.save(newCategory);
-      }
-    }
-  }
+  // async addCategories(categories: CreateCategoryDto[]) {
+  //   for (const category of categories) {
+  //     const existingCategory = await this.repository.findOne({
+  //       where: { name: category.name },
+  //     });
+  //     if (!existingCategory) {
+  //       const newCategory = this.repository.create({ name: category.name });
+  //       await this.repository.save(newCategory);
+  //     }
+  //   }
+  // }
 }

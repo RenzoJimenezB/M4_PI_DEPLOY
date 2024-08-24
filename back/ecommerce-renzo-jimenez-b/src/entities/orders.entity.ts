@@ -7,17 +7,14 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import { User } from './users.entity';
 import { OrderDetail } from './orderDetails.entity';
 
 @Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
-
-  @ManyToOne(() => User, (user) => user.orders)
-  user: User;
+  id: string;
 
   @Column({ type: 'date' })
   date: Date;
@@ -27,7 +24,10 @@ export class Order {
     this.date = new Date();
   }
 
-  // @OneToOne(() => OrderDetail)
-  // @JoinColumn()
-  // orderDetail: OrderDetail;
+  @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @OneToOne(() => OrderDetail, (orderDetail) => orderDetail.order)
+  orderDetail: OrderDetail;
 }

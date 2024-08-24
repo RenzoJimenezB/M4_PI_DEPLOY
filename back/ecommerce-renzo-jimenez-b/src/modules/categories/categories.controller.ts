@@ -7,12 +7,17 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get()
-  findAll() {
+  getCategories() {
     return this.categoriesService.getCategories();
   }
 
-  @Post('seeder')
-  seedCategories(@Body() categories: CreateCategoryDto[]) {
-    return this.categoriesService.seedCategories(categories);
-  }
+  // @Get('seeder')
+  // addCategories() {
+  //   return this.categoriesService.addCategories();
+  // }
+
+  // @Post('seeder')
+  // seedCategories(@Body() categories: CreateCategoryDto[]) {
+  //   return this.categoriesService.seedCategories(categories);
+  // }
 }
