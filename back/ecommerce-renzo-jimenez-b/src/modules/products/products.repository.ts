@@ -90,7 +90,7 @@ export class ProductsRepository {
     return `Product with id ${id} has been updated`;
   }
 
-  async deleteProduct(id: number) {
-    return `Product with id ${id} has been deleted`;
-  }
+  // async deleteProduct(id: number) {
+  //   return `Product with id ${id} has been deleted`;
+  // }
 }

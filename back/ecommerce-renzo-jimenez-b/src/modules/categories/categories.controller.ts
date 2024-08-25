@@ -11,10 +11,10 @@ export class CategoriesController {
     return this.categoriesService.getCategories();
   }
 
-  // @Get('seeder')
-  // addCategories() {
-  //   return this.categoriesService.addCategories();
-  // }
+  @Get('seeder')
+  addCategories() {
+    return this.categoriesService.addCategories();
+  }
 
   // @Post('seeder')
   // seedCategories(@Body() categories: CreateCategoryDto[]) {

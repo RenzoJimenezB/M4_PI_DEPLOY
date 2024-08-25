@@ -3,9 +3,6 @@ import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/users.entity';
-import { Repository } from 'typeorm';
 import { PublicUserDto } from './dto/public-user.dto';
 
 @Injectable()

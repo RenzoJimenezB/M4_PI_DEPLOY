@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/categories.entity';
-import { Repository } from 'typeorm';
-import { CreateCategoryDto } from './dto/create-category.dto';
+import { In, Repository } from 'typeorm';
 import * as data from 'src/utils/data.json';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
-// export class CategoriesRepository extends Repository<Category> {
 export class CategoriesRepository {
   constructor(
     @InjectRepository(Category)
@@ -21,15 +20,49 @@ export class CategoriesRepository {
     return await this.repository.findOne({ where: { name } });
   }
 
-  // async addCategories(categories: CreateCategoryDto[]) {
+  async addCategories() {
+    // Extract the name of categories from input data and filter duplicates
+    const categoryNames = Array.from(
+      new Set(data.map((element) => element.category)),
+    );
+
+    // Find existing categories in the database
+    const existingCategories = await this.repository.find({
+      where: { name: In(categoryNames) },
+      // In operator in TypeORM allows to filter query results based on whether a column's value matches any value in a given list
+      // In returns an array of entities that match any of the specified values in the In array
+    });
+
+    // Extract the names of existing categories
+    const existingCategoryNames = existingCategories.map(
+      (category) => category.name,
+    );
+
+    // Filter out existing categories and prepare new categories for insertion
+    const newCategories = categoryNames
+      .filter((name) => !existingCategoryNames.includes(name))
+      .map((name) => this.repository.create({ name }));
+
+    // Insert new categories if any exist
+    if (newCategories.length > 0) {
+      await this.repository.save(newCategories);
+    }
+
+    return `New categories: ${newCategories.map((category) => category.name)}`;
+  }
+
+  // async seedCategories(categories: CreateCategoryDto[]) {
   //   for (const category of categories) {
   //     const existingCategory = await this.repository.findOne({
   //       where: { name: category.name },
   //     });
+
   //     if (!existingCategory) {
   //       const newCategory = this.repository.create({ name: category.name });
   //       await this.repository.save(newCategory);
   //     }
   //   }
+
+  //   return 'New categories have been added sucessfully';
   // }
 }

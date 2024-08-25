@@ -11,9 +11,9 @@ export class CategoriesService {
     return this.categoriesRepository.findAll();
   }
 
-  // async addCategories() {
-  //   return this.categoriesRepository.addCategories();
-  // }
+  async addCategories() {
+    return this.categoriesRepository.addCategories();
+  }
 
   // async seedCategories(categories: CreateCategoryDto[]) {
   //   return this.categoriesRepository.addCategories(categories);

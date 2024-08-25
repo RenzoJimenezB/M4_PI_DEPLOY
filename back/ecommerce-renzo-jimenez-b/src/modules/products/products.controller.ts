@@ -31,6 +31,11 @@ export class ProductsController {
     return this.productsService.getProductById(id);
   }
 
+  @Get('seeder')
+  addProducts() {
+    return this.productsService.addProducts();
+  }
+
   @HttpCode(201)
   @Post()
   @UseGuards(AuthGuard)
@@ -38,10 +43,10 @@ export class ProductsController {
     return this.productsService.createProduct(product);
   }
 
-  @Post('seeder')
-  seedProducts(@Body() products: CreateProductDto[]) {
-    return this.productsService.seedProducts(products);
-  }
+  // @Post('seeder')
+  // seedProducts(@Body() products: CreateProductDto[]) {
+  //   return this.productsService.seedProducts(products);
+  // }
 
   @HttpCode(200)
   @Put(':id')
@@ -50,10 +55,10 @@ export class ProductsController {
     return this.productsService.updateProduct(id, updateData);
   }
 
-  @HttpCode(200)
-  @Delete(':id')
-  @UseGuards(AuthGuard)
-  deleteProduct(@Param('id') id: string) {
-    return this.productsService.deleteProduct(Number(id));
-  }
+  // @HttpCode(200)
+  // @Delete(':id')
+  // @UseGuards(AuthGuard)
+  // deleteProduct(@Param('id') id: string) {
+  //   return this.productsService.deleteProduct(Number(id));
+  // }
 }

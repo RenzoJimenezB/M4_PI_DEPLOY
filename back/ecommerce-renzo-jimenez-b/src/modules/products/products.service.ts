@@ -15,7 +15,6 @@ export class ProductsService {
     page: number,
     limit: number,
   ): Promise<PaginatedProductsDto> {
-    // dto?
     return this.productsRepository.findAll(page, limit);
     // al realizar la busqueda de todos los productos aquellos con stock === 0
     // no deben ser mostrados
@@ -27,8 +26,12 @@ export class ProductsService {
   //   return data;
   // }
 
-  getProductById(id: string): Promise<Product> {
+  async getProductById(id: string): Promise<Product> {
     return this.productsRepository.findOneById(id);
+  }
+
+  async addProducts() {
+    throw new Error('Method not implemented.');
   }
 
   async createProduct(product: CreateProductDto) {
@@ -42,15 +45,15 @@ export class ProductsService {
     }
   }
 
-  async seedProducts(products: CreateProductDto[]) {
-    return this.productsRepository.seedProducts(products);
-  }
+  // async seedProducts(products: CreateProductDto[]) {
+  //   return this.productsRepository.seedProducts(products);
+  // }
 
   updateProduct(id: string, updateData: Partial<Product>) {
     return this.productsRepository.updateProduct(id, updateData);
   }
 
-  deleteProduct(id: number) {
-    return this.productsRepository.deleteProduct(id);
-  }
+  // deleteProduct(id: number) {
+  //   return this.productsRepository.deleteProduct(id);
+  // }
 }
