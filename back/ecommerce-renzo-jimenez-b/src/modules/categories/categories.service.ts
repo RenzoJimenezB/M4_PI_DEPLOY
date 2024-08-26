@@ -16,6 +16,6 @@ export class CategoriesService {
   }
 
   // async seedCategories(categories: CreateCategoryDto[]) {
-  //   return this.categoriesRepository.addCategories(categories);
+  //   return this.categoriesRepository.seedCategories(categories);
   // }
 }

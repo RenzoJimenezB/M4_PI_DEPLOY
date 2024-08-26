@@ -21,7 +21,7 @@ export class CategoriesRepository {
   }
 
   async addCategories() {
-    // Extract the name of categories from input data and filter duplicates
+    // Extract the category names from input data and filter duplicates
     const categoryNames = Array.from(
       new Set(data.map((element) => element.category)),
     );

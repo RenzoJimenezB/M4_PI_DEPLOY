@@ -22,7 +22,6 @@ const config = {
   autoLoadEntities: true,
   synchronize: true,
   logging: true,
-  // entities: [User, Product, Order, OrderDetail, Category],
   // entities: ['dist/**/*.entity{.ts,.js'],
   // migrations: ['dist/migrations/*{.ts,.js'],
 };

@@ -31,7 +31,7 @@ export class ProductsService {
   }
 
   async addProducts() {
-    throw new Error('Method not implemented.');
+    return this.productsRepository.addProducts();
   }
 
   async createProduct(product: CreateProductDto) {

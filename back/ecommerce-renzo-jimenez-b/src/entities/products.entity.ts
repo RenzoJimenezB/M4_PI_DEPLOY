@@ -31,8 +31,7 @@ export class Product {
 
   @Column({
     type: 'text',
-    default:
-      'https://media.istockphoto.com/id/1206806317/es/vector/icono-del-carrito-de-compras-aislado-sobre-fondo-blanco.jpg?s=1024x1024&w=is&k=20&c=FgR6yNS6MnF-nGpJTWc_k6ZUyIrJvl1jlW12dicErms=',
+    default: 'https://defaultImgUrl.com/',
   })
   imgUrl: string;
 

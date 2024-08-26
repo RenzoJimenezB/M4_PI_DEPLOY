@@ -3,9 +3,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/entities/products.entity';
 import { Repository } from 'typeorm';
-import { UUID } from 'crypto';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
 import { CategoriesRepository } from '../categories/categories.repository';
+import * as data from 'src/utils/data.json';
 
 @Injectable()
 export class ProductsRepository {
@@ -16,7 +16,6 @@ export class ProductsRepository {
   ) {}
 
   async findAll(page: number, limit: number): Promise<PaginatedProductsDto> {
-    // dto?
     const skip = (page - 1) * limit;
     const take = limit;
     console.log(`returning items from indices ${skip} to ${skip + take - 1}`);
@@ -27,8 +26,10 @@ export class ProductsRepository {
       relations: { category: true },
     });
 
+    const inStock = results.filter((product) => product.stock > 0);
+
     return {
-      data: results,
+      data: inStock,
       count: total,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
@@ -36,9 +37,40 @@ export class ProductsRepository {
   }
 
   async findOneById(id: string): Promise<Product> {
-    return this.repository.findOne({
-      where: { id },
+    return this.repository.findOneBy({ id });
+  }
+
+  async addProducts() {
+    // Fetch all categories once and map by name for quick lookup
+    const categories = await this.categoriesRepository.findAll();
+    const categoryMap = new Map(
+      categories.map((category) => [category.name, category]),
+    );
+
+    const products = data.map((element) => {
+      const category = categoryMap.get(element.category);
+      // const category = categories.find(
+      //   (category) => category.name === element.category,
+      // );
+
+      return {
+        name: element.name,
+        description: element.description,
+        price: element.price,
+        stock: element.stock,
+        category,
+      };
     });
+
+    await this.repository
+      .createQueryBuilder()
+      .insert()
+      .into(Product)
+      .values(products)
+      .orUpdate(['description', 'price', 'stock'], ['name'])
+      .execute();
+
+    return `New products: ${products.map((product) => product.name)}`;
   }
 
   async create(product: CreateProductDto) {
