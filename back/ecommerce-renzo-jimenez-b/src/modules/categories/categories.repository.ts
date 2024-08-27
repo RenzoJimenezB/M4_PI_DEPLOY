@@ -29,8 +29,6 @@ export class CategoriesRepository {
     // Find existing categories in the database
     const existingCategories = await this.repository.find({
       where: { name: In(categoryNames) },
-      // In operator in TypeORM allows to filter query results based on whether a column's value matches any value in a given list
-      // In returns an array of entities that match any of the specified values in the In array
     });
 
     // Extract the names of existing categories
@@ -47,8 +45,6 @@ export class CategoriesRepository {
     if (newCategories.length > 0) {
       await this.repository.save(newCategories);
     }
-
-    return `New categories: ${newCategories.map((category) => category.name)}`;
   }
 
   // async seedCategories(categories: CreateCategoryDto[]) {

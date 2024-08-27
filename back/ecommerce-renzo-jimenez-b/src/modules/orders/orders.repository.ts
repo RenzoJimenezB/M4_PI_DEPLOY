@@ -23,27 +23,37 @@ export class OrdersRepository {
   }
 
   async findById(id: string): Promise<Order> {
-    // return await this.repository.findOne({
-    //   where: { id },
-    //   relations: {
-    //     orderDetail: true,
-    //   },
-    // });
-    console.log(id);
+    return await this.repository.findOne({
+      where: { id },
+      relations: {
+        orderDetail: {
+          products: true,
+        },
+      },
+    });
 
-    return await this.repository
-      .createQueryBuilder('order')
-      .leftJoinAndSelect('order.orderDetail', 'orderdetail')
-      .where('order.id = :id', { id })
-      .getOne();
+    // return await this.repository
+    //   .createQueryBuilder('order')
+    //   .leftJoinAndSelect('order.orderDetail', 'orderdetail')
+    //   .where('order.id = :id', { id })
+    //   .getOne();
   }
 
-  async create(order: CreateOrderDto): Promise<OrderWithDetailsDto> {
+  async create(order: CreateOrderDto): Promise<Order> {
     // find user and assign it to a new order
     const user = await this.usersRepository.findOneById(order.userId);
 
+    if (!user) {
+      throw new Error('User not found');
+    }
+
     // create and save order instance to generate and persist the ID
-    let newOrder = await this.repository.save(this.repository.create({ user }));
+    // let newOrder = await this.repository.save(this.repository.create({ user }));
+
+    let newOrder = new Order();
+    newOrder.user = user;
+
+    await this.repository.save(newOrder);
 
     let totalPrice = 0;
     let productsToBeOrdered = [];
@@ -54,6 +64,10 @@ export class OrdersRepository {
       const orderProduct = await this.productsRepository.findOneById(
         product.id,
       );
+
+      if (!product) {
+        throw new Error('Product not found');
+      }
 
       if (orderProduct) {
         // udpate total price (orderDetail)
@@ -80,16 +94,22 @@ export class OrdersRepository {
       order: newOrder,
     });
 
-    newOrder.orderDetail = orderDetail;
-    await this.repository.save(newOrder);
-
     // return order with total price and orderDetail_id
-    const orderWithDetails: OrderWithDetailsDto = {
-      order: newOrder,
-      orderDetailId: orderDetail.id,
-      totalPrice: orderDetail.price,
-    };
+    return await this.repository.findOne({
+      where: { id: newOrder.id },
+      relations: {
+        orderDetail: {
+          products: true,
+        },
+      },
+    });
 
-    return orderWithDetails;
+    // const orderWithDetails: OrderWithDetailsDto = {
+    //   order: newOrder,
+    //   orderDetailId: orderDetail.id,
+    //   totalPrice: orderDetail.price,
+    // };
+
+    // return orderWithDetails;
   }
 }

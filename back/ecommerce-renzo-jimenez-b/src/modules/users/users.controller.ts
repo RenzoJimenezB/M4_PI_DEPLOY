@@ -4,10 +4,10 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -18,14 +18,14 @@ import { AuthGuard } from '../auth/auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   @Get()
   @UseGuards(AuthGuard)
   findAll() {
     return this.usersService.getUsers();
   }
 
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   @Get(':id')
   @UseGuards(AuthGuard)
   findById(@Param('id') id: string) {
@@ -33,20 +33,20 @@ export class UsersController {
     return this.usersService.getUserById(id);
   }
 
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
 
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   @Put(':id')
   @UseGuards(AuthGuard)
   updateUser(@Param('id') id: string) {
     return this.usersService.updateUser(Number(id));
   }
 
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   @Delete(':id')
   @UseGuards(AuthGuard)
   deleteUser(@Param('id') id: string) {

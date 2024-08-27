@@ -69,8 +69,6 @@ export class ProductsRepository {
       .values(products)
       .orUpdate(['description', 'price', 'stock'], ['name'])
       .execute();
-
-    return `New products: ${products.map((product) => product.name)}`;
   }
 
   async create(product: CreateProductDto) {
@@ -119,7 +117,8 @@ export class ProductsRepository {
       Object.assign(product, updateData);
       await this.repository.save(product);
     }
-    return `Product with id ${id} has been updated`;
+
+    console.log(`Product with id ${id} has been updated`);
   }
 
   // async deleteProduct(id: number) {

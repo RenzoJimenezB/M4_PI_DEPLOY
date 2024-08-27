@@ -20,7 +20,7 @@ export class OrdersService {
     return this.ordersRepository.findById(id);
   }
 
-  async addOrder(order: CreateOrderDto): Promise<OrderWithDetailsDto> {
+  async addOrder(order: CreateOrderDto): Promise<Order> {
     const orderDto = plainToInstance(CreateOrderDto, order);
 
     try {

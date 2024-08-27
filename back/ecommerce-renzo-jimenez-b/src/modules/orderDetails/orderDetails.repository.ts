@@ -11,7 +11,14 @@ export class OrderDetailsRepository {
   ) {}
 
   async create(orderDetail: Partial<OrderDetail>) {
-    return this.repository.save(orderDetail);
+    const savedOrder = await this.repository.save(orderDetail);
+
+    return this.repository.findOne({
+      where: { id: savedOrder.id },
+      relations: {
+        products: true,
+      },
+    });
 
     // id, price, products, orderId
   }
