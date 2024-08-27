@@ -10,7 +10,7 @@ export class OrderDetailsRepository {
     private repository: Repository<OrderDetail>,
   ) {}
 
-  async create(orderDetail: Partial<OrderDetail>) {
+  async save(orderDetail: Partial<OrderDetail>) {
     const savedOrder = await this.repository.save(orderDetail);
 
     return this.repository.findOne({

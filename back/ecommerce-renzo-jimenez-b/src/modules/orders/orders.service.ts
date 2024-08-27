@@ -6,7 +6,6 @@ import { OrdersRepository } from './orders.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
-import { OrderWithDetailsDto } from './dto/order-with-details.dto';
 
 @Injectable()
 export class OrdersService {

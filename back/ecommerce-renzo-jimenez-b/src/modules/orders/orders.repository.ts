@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from 'src/entities/orders.entity';
 import { Repository } from 'typeorm';
@@ -6,7 +10,6 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { ProductsRepository } from '../products/products.repository';
 import { UsersRepository } from '../users/users.repository';
 import { OrderDetailsRepository } from '../orderDetails/orderDetails.repository';
-import { OrderWithDetailsDto } from './dto/order-with-details.dto';
 
 @Injectable()
 export class OrdersRepository {
@@ -31,85 +34,34 @@ export class OrdersRepository {
         },
       },
     });
-
-    // return await this.repository
-    //   .createQueryBuilder('order')
-    //   .leftJoinAndSelect('order.orderDetail', 'orderdetail')
-    //   .where('order.id = :id', { id })
-    //   .getOne();
   }
 
   async create(order: CreateOrderDto): Promise<Order> {
-    // find user and assign it to a new order
     const user = await this.usersRepository.findOneById(order.userId);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
-    // create and save order instance to generate and persist the ID
-    // let newOrder = await this.repository.save(this.repository.create({ user }));
-
-    let newOrder = new Order();
-    newOrder.user = user;
-
+    const newOrder = await this.repository.create({ user });
     await this.repository.save(newOrder);
 
-    let totalPrice = 0;
-    let productsToBeOrdered = [];
+    const { products, totalPrice } =
+      await this.productsRepository.processProducts(order.products);
 
-    const { products } = order;
-
-    for (const product of products) {
-      const orderProduct = await this.productsRepository.findOneById(
-        product.id,
-      );
-
-      if (!product) {
-        throw new Error('Product not found');
-      }
-
-      if (orderProduct) {
-        // udpate total price (orderDetail)
-        totalPrice += orderProduct.price;
-
-        // update stock (product)
-        const updatedStock = orderProduct.stock - 1;
-        await this.productsRepository.updateProduct(orderProduct.id, {
-          stock: Math.max(updatedStock, 0),
-        });
-
-        productsToBeOrdered.push(orderProduct);
-      }
+    if (products.length === 0) {
+      throw new BadRequestException('No valid products were ordered');
     }
 
-    if (productsToBeOrdered.length === 0) {
-      throw new Error('No products were ordered');
-    }
-
-    // create and save orderDetail instance
-    const orderDetail = await this.orderDetailsRepository.create({
-      products: productsToBeOrdered,
+    await this.orderDetailsRepository.save({
+      products,
       price: totalPrice,
       order: newOrder,
     });
 
-    // return order with total price and orderDetail_id
-    return await this.repository.findOne({
+    return this.repository.findOne({
       where: { id: newOrder.id },
-      relations: {
-        orderDetail: {
-          products: true,
-        },
-      },
+      relations: { orderDetail: { products: true } },
     });
-
-    // const orderWithDetails: OrderWithDetailsDto = {
-    //   order: newOrder,
-    //   orderDetailId: orderDetail.id,
-    //   totalPrice: orderDetail.price,
-    // };
-
-    // return orderWithDetails;
   }
 }

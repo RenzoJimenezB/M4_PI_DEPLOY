@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/entities/products.entity';
@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
 import { CategoriesRepository } from '../categories/categories.repository';
 import * as data from 'src/utils/data.json';
+import { ProductIdDto } from './dto/product-id.dto';
+import { ProcessedProductsDto } from './dto/processed-products-dto';
 
 @Injectable()
 export class ProductsRepository {
@@ -124,4 +126,30 @@ export class ProductsRepository {
   // async deleteProduct(id: number) {
   //   return `Product with id ${id} has been deleted`;
   // }
+
+  async processProducts(
+    productIds: ProductIdDto[],
+  ): Promise<ProcessedProductsDto> {
+    const products = [];
+    let totalPrice = 0;
+
+    for (const product of productIds) {
+      const orderProduct = await this.findOneById(product.id);
+
+      if (!orderProduct) {
+        throw new NotFoundException(`Product with id ${product.id} not found`);
+      }
+
+      const updatedStock = orderProduct.stock - 1;
+      await this.updateProduct(orderProduct.id, {
+        stock: Math.max(updatedStock, 0),
+      });
+
+      totalPrice += orderProduct.price;
+
+      products.push(orderProduct);
+    }
+
+    return { products, totalPrice };
+  }
 }

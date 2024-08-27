@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { plainToInstance } from 'class-transformer';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -6,6 +10,8 @@ import { validateData } from 'src/helpers/validateData';
 import { Product } from 'src/entities/products.entity';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
 import { UUID } from 'crypto';
+import { ProductIdDto } from './dto/product-id.dto';
+import { ProcessedProductsDto } from './dto/processed-products-dto';
 
 @Injectable()
 export class ProductsService {
@@ -49,7 +55,7 @@ export class ProductsService {
   //   return this.productsRepository.seedProducts(products);
   // }
 
-  updateProduct(id: string, updateData: Partial<Product>) {
+  async updateProduct(id: string, updateData: Partial<Product>) {
     return this.productsRepository.updateProduct(id, updateData);
   }
 
