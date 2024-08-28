@@ -113,14 +113,19 @@ export class ProductsRepository {
   }
 
   async updateProduct(id: string, updateData: Partial<Product>) {
-    const product = await this.repository.findOneBy({ id });
+    await this.repository.update(id, updateData);
 
-    if (product) {
-      Object.assign(product, updateData);
-      await this.repository.save(product);
-    }
+    const updatedProduct = await this.repository.findOneBy({ id });
+
+    // const product = await this.repository.findOneBy({ id });
+
+    // if (product) {
+    //   Object.assign(product, updateData);
+    //   await this.repository.save(product);
+    // }
 
     console.log(`Product with id ${id} has been updated`);
+    return updatedProduct;
   }
 
   // async deleteProduct(id: number) {

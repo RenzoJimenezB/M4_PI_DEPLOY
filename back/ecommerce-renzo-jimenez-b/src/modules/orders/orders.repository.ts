@@ -28,11 +28,7 @@ export class OrdersRepository {
   async findById(id: string): Promise<Order> {
     return await this.repository.findOne({
       where: { id },
-      relations: {
-        orderDetail: {
-          products: true,
-        },
-      },
+      relations: { orderDetail: { products: true } },
     });
   }
 
