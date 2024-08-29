@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'src/entities/products.entity';
 import { Repository } from 'typeorm';
+import { Product } from './entities/products.entity';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
 import { CategoriesRepository } from '../categories/categories.repository';
 import * as data from 'src/utils/data.json';
@@ -69,7 +69,8 @@ export class ProductsRepository {
       .insert()
       .into(Product)
       .values(products)
-      .orUpdate(['description', 'price', 'stock'], ['name'])
+      // .orUpdate(['description', 'price', 'stock'], ['name'])
+      .orIgnore()
       .execute();
   }
 

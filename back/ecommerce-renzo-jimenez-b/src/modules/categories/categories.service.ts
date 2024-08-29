@@ -1,5 +1,5 @@
-import { Category } from 'src/entities/categories.entity';
 import { Injectable } from '@nestjs/common';
+import { Category } from './entities/categories.entity';
 import { CategoriesRepository } from './categories.repository';
 import { CreateCategoryDto } from './dto/create-category.dto';
 

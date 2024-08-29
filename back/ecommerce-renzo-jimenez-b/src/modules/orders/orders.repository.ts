@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from 'src/entities/orders.entity';
+import { Order } from './entities/orders.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ProductsRepository } from '../products/products.repository';
@@ -39,7 +39,7 @@ export class OrdersRepository {
       throw new NotFoundException('User not found');
     }
 
-    const newOrder = await this.repository.create({ user });
+    const newOrder = this.repository.create({ user });
     await this.repository.save(newOrder);
 
     const { products, totalPrice } =
@@ -57,7 +57,7 @@ export class OrdersRepository {
 
     return this.repository.findOne({
       where: { id: newOrder.id },
-      relations: { orderDetail: { products: true } },
+      relations: { orderDetail: true },
     });
   }
 }

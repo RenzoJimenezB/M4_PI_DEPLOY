@@ -1,6 +1,6 @@
+import { Product } from 'src/modules/products/entities/products.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 // import { v4 as uuid } from 'uuid';
-import { Product } from './products.entity';
 
 @Entity({
   name: 'categories',

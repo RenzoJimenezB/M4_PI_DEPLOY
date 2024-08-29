@@ -7,9 +7,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Order } from 'src/modules/orders/entities/orders.entity';
+import { Product } from 'src/modules/products/entities/products.entity';
 // import { v4 as uuid } from 'uuid';
-import { Product } from './products.entity';
-import { Order } from './orders.entity';
 
 @Entity({
   name: 'orderdetails',

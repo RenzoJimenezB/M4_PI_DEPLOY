@@ -1,17 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { plainToInstance } from 'class-transformer';
 import { CreateProductDto } from './dto/create-product.dto';
 import { validateData } from 'src/helpers/validateData';
-import { Product } from 'src/entities/products.entity';
+import { Product } from './entities/products.entity';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
-import { UUID } from 'crypto';
-import { ProductIdDto } from './dto/product-id.dto';
-import { ProcessedProductsDto } from './dto/processed-products-dto';
 
 @Injectable()
 export class ProductsService {

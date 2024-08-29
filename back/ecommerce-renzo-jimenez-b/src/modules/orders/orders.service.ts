@@ -1,10 +1,8 @@
-import { Order } from 'src/entities/orders.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Order } from './entities/orders.entity';
+import { plainToInstance } from 'class-transformer';
 import { OrdersRepository } from './orders.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 
 @Injectable()

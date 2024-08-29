@@ -13,7 +13,7 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '../auth/auth.guard';
-import { Product } from 'src/entities/products.entity';
+import { Product } from './entities/products.entity';
 
 @Controller('products')
 export class ProductsController {

@@ -1,4 +1,4 @@
-import { Product } from 'src/entities/products.entity';
+import { Product } from '../entities/products.entity';
 
 export class PaginatedProductsDto {
   data: Product[];
