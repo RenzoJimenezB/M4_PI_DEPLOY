@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -74,43 +78,33 @@ export class ProductsRepository {
       .execute();
   }
 
-  async create(product: CreateProductDto) {
+  async create(product: CreateProductDto): Promise<string> {
     const category = await this.categoriesRepository.findByName(
       product.category,
     );
 
     if (!category) {
-      throw new Error(`Category with name ${product.category} not found`);
+      throw new NotFoundException(
+        `Category with name ${product.category} not found`,
+      );
+    }
+
+    const existingProduct = await this.repository.findOne({
+      where: { name: product.name },
+    });
+
+    if (existingProduct) {
+      throw new ConflictException(
+        `Product with name ${product.name} already exists`,
+      );
     }
 
     const newProduct = await this.repository.save({
       ...product,
       category,
     });
+
     return newProduct.id;
-  }
-
-  async seedProducts(products: CreateProductDto[]) {
-    for (const product of products) {
-      const category = await this.categoriesRepository.findByName(
-        product.category,
-      );
-
-      if (!category) {
-        throw new Error(`Category with name ${product.category} not found`);
-      }
-
-      const existingProduct = await this.repository.findOne({
-        where: { name: product.name },
-      });
-      if (!existingProduct) {
-        const newProduct = this.repository.create({
-          ...product,
-          category,
-        });
-        await this.repository.save(newProduct);
-      }
-    }
   }
 
   async updateProduct(id: string, updateData: Partial<Product>) {

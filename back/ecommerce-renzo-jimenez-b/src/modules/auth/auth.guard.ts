@@ -1,10 +1,27 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 
 function validateRequest(request: Request) {
   const authorization = request.headers['authorization'];
-  return authorization === '<email>:<password>';
+
+  if (!authorization) {
+    throw new UnauthorizedException('Authorization header does not exist');
+  }
+
+  const email = authorization.split(':')[0];
+  const password = authorization.split(':')[1];
+
+  if (!email || !password) {
+    throw new UnauthorizedException('Invalid credentials');
+  }
+
+  return true;
 }
 
 @Injectable()

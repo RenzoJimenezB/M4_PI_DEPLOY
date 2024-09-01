@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -19,44 +20,40 @@ import { Product } from './entities/products.entity';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @HttpCode(200)
   @Get()
+  @HttpCode(HttpStatus.OK)
   findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 5) {
     return this.productsService.getProducts(page, limit);
   }
 
-  @HttpCode(200)
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   findById(@Param('id') id: string) {
     return this.productsService.getProductById(id);
   }
 
   @Get('seeder')
+  @HttpCode(HttpStatus.OK)
   addProducts() {
     return this.productsService.addProducts();
   }
 
-  @HttpCode(201)
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   create(@Body() product: CreateProductDto) {
     return this.productsService.createProduct(product);
   }
 
-  // @Post('seeder')
-  // seedProducts(@Body() products: CreateProductDto[]) {
-  //   return this.productsService.seedProducts(products);
-  // }
-
-  @HttpCode(200)
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   updateProduct(@Param('id') id: string, @Body() updateData: Partial<Product>) {
     return this.productsService.updateProduct(id, updateData);
   }
 
-  // @HttpCode(200)
   // @Delete(':id')
+  // @HttpCode(HttpStatus.OK)
   // @UseGuards(AuthGuard)
   // deleteProduct(@Param('id') id: string) {
   //   return this.productsService.deleteProduct(Number(id));

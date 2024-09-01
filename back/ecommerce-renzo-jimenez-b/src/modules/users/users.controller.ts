@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UseGuards,
@@ -18,36 +19,36 @@ import { AuthGuard } from '../auth/auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @HttpCode(HttpStatus.OK)
   @Get()
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   findAll() {
     return this.usersService.getUsers();
   }
 
-  @HttpCode(HttpStatus.OK)
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  findById(@Param('id') id: string) {
+  findById(@Param('id', ParseUUIDPipe) id: string) {
     // console.log(`searching user with id: ${id}...`);
     return this.usersService.getUserById(id);
   }
 
-  @HttpCode(HttpStatus.CREATED)
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
 
-  @HttpCode(HttpStatus.OK)
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   updateUser(@Param('id') id: string) {
     return this.usersService.updateUser(Number(id));
   }
 
-  @HttpCode(HttpStatus.OK)
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   deleteUser(@Param('id') id: string) {
     return this.usersService.deleteUser(Number(id));

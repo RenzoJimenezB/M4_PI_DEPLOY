@@ -1,8 +1,14 @@
 import { Type } from 'class-transformer';
-import { ArrayMinSize, IsUUID, ValidateNested } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsNotEmpty,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { ProductIdDto } from 'src/modules/products/dto/product-id.dto';
 
 export class CreateOrderDto {
+  @IsNotEmpty()
   @IsUUID()
   userId: string;
 

@@ -4,30 +4,33 @@ import {
   IsNotEmpty,
   IsString,
   IsStrongPassword,
+  Length,
   MaxLength,
 } from 'class-validator';
 
 export class CreateUserDto {
-  @IsString()
   @IsNotEmpty()
-  @MaxLength(50)
+  @IsString()
+  // @MaxLength(50)
+  @Length(3, 80)
   name: string;
 
-  @IsEmail()
   @IsNotEmpty()
-  @MaxLength(50)
+  @IsEmail()
+  // @MaxLength(50)
   email: string;
 
-  @IsString()
   @IsNotEmpty()
-  @MaxLength(20)
+  @IsString()
+  @MaxLength(15)
   @IsStrongPassword(
     {
       minLength: 8,
       minLowercase: 1,
       minUppercase: 1,
       minNumbers: 1,
-      minSymbols: 0,
+      // minSymbols: 0,
+      minSymbols: 1,
     },
     {
       message: 'Password is too weak',
@@ -35,17 +38,19 @@ export class CreateUserDto {
   )
   password: string;
 
+  @IsNotEmpty()
   @IsInt()
   phone: number;
 
   @IsString()
-  @MaxLength(50)
+  @Length(5, 20)
   country: string;
 
   @IsString()
+  @Length(3, 80)
   address: string;
 
   @IsString()
-  @MaxLength(50)
+  @Length(5, 20)
   city: string;
 }

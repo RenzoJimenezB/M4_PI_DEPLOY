@@ -15,15 +15,7 @@ export class ProductsService {
     limit: number,
   ): Promise<PaginatedProductsDto> {
     return this.productsRepository.findAll(page, limit);
-    // al realizar la busqueda de todos los productos aquellos con stock === 0
-    // no deben ser mostrados
   }
-
-  // return data only:
-  // async getProducts(page: number, limit: number): Promise<Product[]> {
-  //   const { data } = await this.productsRepository.findAll(page, limit);
-  //   return data;
-  // }
 
   async getProductById(id: string): Promise<Product> {
     return this.productsRepository.findOneById(id);
@@ -43,10 +35,6 @@ export class ProductsService {
       throw error;
     }
   }
-
-  // async seedProducts(products: CreateProductDto[]) {
-  //   return this.productsRepository.seedProducts(products);
-  // }
 
   async updateProduct(id: string, updateData: Partial<Product>) {
     return this.productsRepository.updateProduct(id, updateData);
