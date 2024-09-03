@@ -153,10 +153,15 @@ export class ProductsRepository {
     let totalPrice = 0;
 
     for (const product of productIds) {
+      // ProductIdDto validation would ensure every product has an id
+      if (!product.id) {
+        throw new BadRequestException('Product ID is missing');
+      }
+
       const orderProduct = await this.findOneById(product.id, manager);
 
       if (!orderProduct) {
-        throw new NotFoundException(`Product with id ${product.id} not found`);
+        throw new NotFoundException(`Product with ID ${product.id} not found`);
       }
 
       const updatedStock = orderProduct.stock - 1;
