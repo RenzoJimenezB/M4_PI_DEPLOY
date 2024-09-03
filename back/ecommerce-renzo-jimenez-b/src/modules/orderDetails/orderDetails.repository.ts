@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderDetail } from './entities/orderDetails.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class OrderDetailsRepository {
@@ -10,16 +10,11 @@ export class OrderDetailsRepository {
     private repository: Repository<OrderDetail>,
   ) {}
 
-  async save(orderDetail: Partial<OrderDetail>) {
-    const savedOrder = await this.repository.save(orderDetail);
+  async save(orderDetail: Partial<OrderDetail>, manager?: EntityManager) {
+    const repository = manager
+      ? manager.getRepository(OrderDetail)
+      : this.repository;
 
-    return this.repository.findOne({
-      where: { id: savedOrder.id },
-      relations: {
-        products: true,
-      },
-    });
-
-    // id, price, products, orderId
+    await repository.save(orderDetail);
   }
 }

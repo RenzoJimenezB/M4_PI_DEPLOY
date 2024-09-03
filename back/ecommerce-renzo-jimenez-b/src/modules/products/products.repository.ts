@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Product } from './entities/products.entity';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
 import { CategoriesRepository } from '../categories/categories.repository';
@@ -42,8 +42,12 @@ export class ProductsRepository {
     };
   }
 
-  async findOneById(id: string): Promise<Product> {
-    return this.repository.findOneBy({ id });
+  async findOneById(id: string, manager?: EntityManager): Promise<Product> {
+    const repository = manager
+      ? manager.getRepository(Product)
+      : this.repository;
+
+    return repository.findOneBy({ id });
   }
 
   async addProducts() {
@@ -107,10 +111,18 @@ export class ProductsRepository {
     return newProduct.id;
   }
 
-  async updateProduct(id: string, updateData: Partial<Product>) {
-    await this.repository.update(id, updateData);
+  async updateProduct(
+    id: string,
+    updateData: Partial<Product>,
+    manager?: EntityManager,
+  ) {
+    const repository = manager
+      ? manager.getRepository(Product)
+      : this.repository;
 
-    const updatedProduct = await this.repository.findOneBy({ id });
+    await repository.update(id, updateData);
+
+    const updatedProduct = await repository.findOneBy({ id });
 
     // const product = await this.repository.findOneBy({ id });
 
@@ -128,25 +140,28 @@ export class ProductsRepository {
   // }
 
   async processProducts(
-    productIds: ProductIdDto[],
+    productIds: Partial<Product>[],
+    manager: EntityManager,
+    // productIds: ProductIdDto[],
   ): Promise<ProcessedProductsDto> {
     const products = [];
     let totalPrice = 0;
 
     for (const product of productIds) {
-      const orderProduct = await this.findOneById(product.id);
+      const orderProduct = await this.findOneById(product.id, manager);
 
       if (!orderProduct) {
         throw new NotFoundException(`Product with id ${product.id} not found`);
       }
 
       const updatedStock = orderProduct.stock - 1;
-      await this.updateProduct(orderProduct.id, {
-        stock: Math.max(updatedStock, 0),
-      });
+      await this.updateProduct(
+        orderProduct.id,
+        { stock: Math.max(updatedStock, 0) },
+        manager,
+      );
 
       totalPrice += orderProduct.price;
-
       products.push(orderProduct);
     }
 

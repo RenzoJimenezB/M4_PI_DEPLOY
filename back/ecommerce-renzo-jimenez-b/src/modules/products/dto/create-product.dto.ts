@@ -8,28 +8,28 @@ import {
 } from 'class-validator';
 
 export class CreateProductDto {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @MaxLength(50)
   name: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   description: string;
 
-  @IsNumber()
   @IsNotEmpty()
+  @IsNumber()
   price: number;
 
-  @IsInt()
   @IsNotEmpty()
+  @IsInt()
   stock: number;
 
   @IsString()
-  @Transform(({ value }) => value || 'default-image-url.jpg')
+  // @Transform(({ value }) => value || 'https://images.com/default-image.jpg')
   imgUrl?: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   category: string;
 }

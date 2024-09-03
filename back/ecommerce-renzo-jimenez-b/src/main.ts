@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { loggerGlobal } from './middleware/logger.middleware';
 import { CategoriesService } from './modules/categories/categories.service';
 import { ProductsService } from './modules/products/products.service';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,7 @@ async function bootstrap() {
   await productsService.addProducts();
 
   app.use(loggerGlobal);
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
 bootstrap();

@@ -36,8 +36,8 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  create(@Body() user: CreateUserDto) {
+    return this.usersService.createUser(user);
   }
 
   @Put(':id')

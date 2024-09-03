@@ -26,14 +26,16 @@ export class ProductsService {
   }
 
   async createProduct(product: CreateProductDto) {
-    const productDto = plainToInstance(CreateProductDto, product);
+    return this.productsRepository.create(product);
 
-    try {
-      await validateData(productDto);
-      return this.productsRepository.create(productDto);
-    } catch (error) {
-      throw error;
-    }
+    // const productDto = plainToInstance(CreateProductDto, product);
+
+    // try {
+    //   await validateData(productDto);
+    //   return this.productsRepository.create(productDto);
+    // } catch (error) {
+    //   throw error;
+    // }
   }
 
   async updateProduct(id: string, updateData: Partial<Product>) {

@@ -20,14 +20,16 @@ export class UsersService {
   }
 
   async createUser(user: CreateUserDto) {
-    const userDto = plainToInstance(CreateUserDto, user);
+    return this.usersRepository.create(user);
 
-    try {
-      await validateData(userDto);
-      return this.usersRepository.create(userDto);
-    } catch (error) {
-      throw error;
-    }
+    // const userDto = plainToInstance(CreateUserDto, user);
+
+    // try {
+    //   await validateData(userDto);
+    //   return this.usersRepository.create(userDto);
+    // } catch (error) {
+    //   throw error;
+    // }
   }
 
   updateUser(id: number) {

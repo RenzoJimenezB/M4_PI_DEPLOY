@@ -18,13 +18,15 @@ export class OrdersService {
   }
 
   async addOrder(order: CreateOrderDto): Promise<Order> {
-    const orderDto = plainToInstance(CreateOrderDto, order);
+    return this.ordersRepository.create(order);
 
-    try {
-      await validateData(orderDto);
-      return this.ordersRepository.create(orderDto);
-    } catch (error) {
-      throw error;
-    }
+    //   const orderDto = plainToInstance(CreateOrderDto, order);
+
+    //   try {
+    //     await validateData(orderDto);
+    //     return this.ordersRepository.create(orderDto);
+    //   } catch (error) {
+    //     throw error;
+    //   }
   }
 }

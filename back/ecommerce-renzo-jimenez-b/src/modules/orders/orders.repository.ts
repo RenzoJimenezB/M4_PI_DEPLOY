@@ -3,13 +3,16 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/orders.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ProductsRepository } from '../products/products.repository';
 import { UsersRepository } from '../users/users.repository';
 import { OrderDetailsRepository } from '../orderDetails/orderDetails.repository';
+import { connectionSource } from 'src/config/typeorm';
+import { User } from '../users/entities/users.entity';
+import { OrderDetail } from '../orderDetails/entities/orderDetails.entity';
 
 @Injectable()
 export class OrdersRepository {
@@ -19,6 +22,8 @@ export class OrdersRepository {
     private usersRepository: UsersRepository,
     private productsRepository: ProductsRepository,
     private orderDetailsRepository: OrderDetailsRepository,
+
+    @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
   async findAll() {
@@ -33,31 +38,51 @@ export class OrdersRepository {
   }
 
   async create(order: CreateOrderDto): Promise<Order> {
-    const user = await this.usersRepository.findOneById(order.userId);
+    // console.log('Is connection established?', this.dataSource.isInitialized);
 
-    if (!user) {
-      throw new NotFoundException('User not found');
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    const manager = queryRunner.manager;
+
+    try {
+      const user = await this.usersRepository.findOneById(
+        order.userId,
+        manager,
+      );
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      const newOrder = manager.getRepository(Order).create({ user });
+      await manager.save(newOrder);
+
+      const { products, totalPrice } =
+        await this.productsRepository.processProducts(order.products, manager);
+
+      if (products.length === 0) {
+        throw new BadRequestException('No valid products were ordered');
+      }
+
+      await manager.getRepository(OrderDetail).save({
+        products,
+        price: totalPrice,
+        order: newOrder,
+      });
+
+      await queryRunner.commitTransaction();
+
+      return this.repository.findOne({
+        where: { id: newOrder.id },
+        relations: { orderDetail: true },
+      });
+    } catch (error) {
+      console.error('Transaction failed:', error);
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
-
-    const newOrder = this.repository.create({ user });
-    await this.repository.save(newOrder);
-
-    const { products, totalPrice } =
-      await this.productsRepository.processProducts(order.products);
-
-    if (products.length === 0) {
-      throw new BadRequestException('No valid products were ordered');
-    }
-
-    await this.orderDetailsRepository.save({
-      products,
-      price: totalPrice,
-      order: newOrder,
-    });
-
-    return this.repository.findOne({
-      where: { id: newOrder.id },
-      relations: { orderDetail: true },
-    });
   }
 }

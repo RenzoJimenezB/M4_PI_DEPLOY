@@ -31,7 +31,7 @@ export class Product {
 
   @Column({
     type: 'text',
-    default: 'https://defaultImgUrl.com/',
+    default: 'https://images.com/default-image.jpg',
   })
   imgUrl: string;
 
