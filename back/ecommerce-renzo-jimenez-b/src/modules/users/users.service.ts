@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 import { PublicUserDto } from './dto/public-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,8 +20,9 @@ export class UsersService {
     return plainToInstance(PublicUserDto, user);
   }
 
-  async createUser(user: CreateUserDto) {
-    return this.usersRepository.create(user);
+  async createUser(user: CreateUserDto): Promise<PublicUserDto> {
+    const newUser = this.usersRepository.create(user);
+    return plainToInstance(PublicUserDto, newUser);
 
     // const userDto = plainToInstance(CreateUserDto, user);
 
@@ -32,8 +34,8 @@ export class UsersService {
     // }
   }
 
-  updateUser(id: number) {
-    return this.usersRepository.updateUser(id);
+  updateUser(id: string, updateData: UpdateUserDto) {
+    return this.usersRepository.updateUser(id, updateData);
   }
 
   deleteUser(id: number) {

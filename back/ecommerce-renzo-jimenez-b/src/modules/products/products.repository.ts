@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -119,6 +120,10 @@ export class ProductsRepository {
     const repository = manager
       ? manager.getRepository(Product)
       : this.repository;
+
+    if (Object.keys(updateData).length === 0) {
+      throw new BadRequestException('No update data provided');
+    }
 
     await repository.update(id, updateData);
 

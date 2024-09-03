@@ -14,6 +14,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -43,8 +44,8 @@ export class UsersController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  updateUser(@Param('id') id: string) {
-    return this.usersService.updateUser(Number(id));
+  updateUser(@Param('id') id: string, @Body() updateData: UpdateUserDto) {
+    return this.usersService.updateUser(id, updateData);
   }
 
   @Delete(':id')

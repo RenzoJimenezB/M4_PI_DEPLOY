@@ -31,7 +31,8 @@ export class CreateUserDto {
       minSymbols: 1,
     },
     {
-      message: 'Password is too weak',
+      message:
+        'Password must contain at least one uppercase letter, one lowercase letter, one digit and one special character',
     },
   )
   // @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/, {

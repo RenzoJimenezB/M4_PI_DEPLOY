@@ -9,10 +9,13 @@ export class PublicUserDto {
   @Exclude()
   password: string;
 
-  phone: string;
+  phone: number;
   country: string;
-  address: string;
   city: string;
+  address: string;
+
+  @Exclude()
+  isAdmin: boolean;
 
   @Transform(({ value }) => plainToInstance(PublicOrderDto, value))
   orders: PublicOrderDto[];
