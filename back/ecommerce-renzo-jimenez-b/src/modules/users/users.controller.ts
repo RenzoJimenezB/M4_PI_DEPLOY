@@ -44,14 +44,17 @@ export class UsersController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  updateUser(@Param('id') id: string, @Body() updateData: UpdateUserDto) {
+  updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateData: UpdateUserDto,
+  ) {
     return this.usersService.updateUser(id, updateData);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  deleteUser(@Param('id') id: string) {
+  deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.deleteUser(Number(id));
   }
 }

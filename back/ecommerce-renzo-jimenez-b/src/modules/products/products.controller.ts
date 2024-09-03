@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -28,7 +29,7 @@ export class ProductsController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id') id: string) {
+  findById(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.getProductById(id);
   }
 
@@ -48,14 +49,17 @@ export class ProductsController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  updateProduct(@Param('id') id: string, @Body() updateData: Partial<Product>) {
+  updateProduct(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateData: Partial<Product>,
+  ) {
     return this.productsService.updateProduct(id, updateData);
   }
 
   // @Delete(':id')
   // @HttpCode(HttpStatus.OK)
   // @UseGuards(AuthGuard)
-  // deleteProduct(@Param('id') id: string) {
+  // deleteProduct(@Param('id', ParseUUIDPipe) id: string) {
   //   return this.productsService.deleteProduct(Number(id));
   // }
 }
