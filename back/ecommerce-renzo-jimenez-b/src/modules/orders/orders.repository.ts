@@ -31,10 +31,16 @@ export class OrdersRepository {
   }
 
   async findById(id: string): Promise<Order> {
-    return await this.repository.findOne({
+    const order = await this.repository.findOne({
       where: { id },
       relations: { orderDetail: { products: true } },
     });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    return order;
   }
 
   async create(order: CreateOrderDto): Promise<Order> {

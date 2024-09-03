@@ -48,7 +48,13 @@ export class ProductsRepository {
       ? manager.getRepository(Product)
       : this.repository;
 
-    return repository.findOneBy({ id });
+    const product = await repository.findOneBy({ id });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
   }
 
   async addProducts() {

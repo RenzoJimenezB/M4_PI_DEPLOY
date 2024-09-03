@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/users.entity';
@@ -19,10 +23,16 @@ export class UsersRepository {
   async findOneById(id: string, manager?: EntityManager): Promise<User> {
     const repository = manager ? manager.getRepository(User) : this.repository;
 
-    return repository.findOne({
+    const user = await repository.findOne({
       where: { id },
       relations: { orders: true },
     });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async findByEmail(email: string): Promise<User> {
