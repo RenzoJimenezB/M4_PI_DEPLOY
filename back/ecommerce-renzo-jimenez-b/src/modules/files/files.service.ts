@@ -18,7 +18,7 @@ export class FilesService {
     // @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
-  async uploadImage(file: Express.Multer.File, productId: string) {
+  async uploadImage(productId: string, file: Express.Multer.File) {
     const product = await this.productsRepository.findOneById(productId);
 
     if (!product) {
@@ -28,10 +28,11 @@ export class FilesService {
     const uploadedImage = await this.filesRepository
       .uploadImage(file)
       .catch((error) => {
-        console.error('Image upload failed:', error);
+        console.error('Image upload failed.', error);
         throw new InternalServerErrorException('Failed to upload image');
       });
-    // console.log(uploadedImage);
+
+    console.log(uploadedImage);
 
     try {
       await this.productsRepository.updateProduct(productId, {
