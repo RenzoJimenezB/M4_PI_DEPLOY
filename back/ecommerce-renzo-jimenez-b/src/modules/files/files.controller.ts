@@ -1,6 +1,9 @@
 import {
   Controller,
+  FileTypeValidator,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -18,7 +21,20 @@ export class FilesController {
   // ('parameter'): name of the form field in the multipart request
   uploadImage(
     @Param('id') productId: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 200 * 1024,
+            message: 'File size exceeds the allowed limit of 200KB',
+          }),
+          new FileTypeValidator({
+            fileType: /(jpg|jpeg|png|webp)$/,
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
     // @UploadedFile() extracts the uploaded file from the request
   ) {
     return this.filesService.uploadImage(productId, file);
