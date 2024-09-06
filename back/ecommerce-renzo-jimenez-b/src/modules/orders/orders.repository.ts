@@ -10,8 +10,6 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { ProductsRepository } from '../products/products.repository';
 import { UsersRepository } from '../users/users.repository';
 import { OrderDetailsRepository } from '../orderDetails/orderDetails.repository';
-import { connectionSource } from 'src/config/typeorm';
-import { User } from '../users/entities/users.entity';
 import { OrderDetail } from '../orderDetails/entities/orderDetails.entity';
 
 @Injectable()
