@@ -9,6 +9,9 @@ export class PublicUserDto {
   @Exclude()
   password: string;
 
+  @Exclude()
+  passwordConfirmation: string;
+
   phone: number;
   country: string;
   city: string;

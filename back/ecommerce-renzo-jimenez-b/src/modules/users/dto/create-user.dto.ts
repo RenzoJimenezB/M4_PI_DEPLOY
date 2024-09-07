@@ -8,6 +8,7 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
+import { Match } from 'src/helpers/match.decorator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -40,6 +41,13 @@ export class CreateUserDto {
   //     'Password must contain at least one uppercase letter, one lowercase letter, one digit and one special character',
   // })
   password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Match('password', {
+    message: 'Passwords do not match',
+  })
+  passwordConfirmation: string;
 
   @IsNotEmpty()
   @IsInt()

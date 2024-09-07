@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -30,16 +31,21 @@ export class UsersController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  findById(@Param('id', ParseUUIDPipe) id: string) {
+  findById(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: Request & { user: any },
+  ) {
     // console.log(`searching user with id: ${id}...`);
+    // console.log(request.user);
+
     return this.usersService.getUserById(id);
   }
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() user: CreateUserDto) {
-    return this.usersService.createUser(user);
-  }
+  // @Post()
+  // @HttpCode(HttpStatus.CREATED)
+  // create(@Body() user: CreateUserDto) {
+  //   return this.usersService.createUser(user);
+  // }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)

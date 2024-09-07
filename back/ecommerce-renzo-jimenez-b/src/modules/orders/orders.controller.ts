@@ -6,9 +6,11 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('orders')
 export class OrdersController {
@@ -20,11 +22,13 @@ export class OrdersController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.ordersService.getOrder(id);
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   create(@Body() order: CreateOrderDto) {
     return this.ordersService.addOrder(order);
   }

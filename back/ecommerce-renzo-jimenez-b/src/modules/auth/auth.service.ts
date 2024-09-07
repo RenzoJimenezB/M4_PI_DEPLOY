@@ -4,24 +4,62 @@ import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 import { UsersRepository } from '../users/users.repository';
 import { PublicUserDto } from '../users/dto/public-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private jwtService: JwtService,
+  ) {}
 
   getAuth() {
     return 'Get auth';
   }
 
+  async signUp(user: CreateUserDto): Promise<PublicUserDto> {
+    const dbUser = await this.usersRepository.findByEmail(user.email);
+    if (dbUser) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    if (!hashedPassword) {
+      throw new BadRequestException('Password could not be hashed');
+    }
+
+    const newUser = this.usersRepository.create({
+      ...user,
+      password: hashedPassword,
+    });
+
+    return plainToInstance(PublicUserDto, newUser);
+  }
+
   async signIn(email: string, password: string) {
     const user = await this.usersRepository.findByEmail(email);
 
-    if (!user || user?.password !== password) {
-      throw new BadRequestException('Email o password incorrectos');
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    // if (!user || user?.password !== password) {
+    //   throw new BadRequestException('Email o password incorrectos');
+    // }
+
+    if (!user || !isPasswordValid) {
+      throw new BadRequestException('Invalid credentials');
     }
 
-    console.log(`El usuario ${user.id} ha iniciado sesión`);
-    return user;
+    const userPayload = {
+      sub: user.id,
+      name: user.name,
+      email: user.email,
+    };
+
+    const token = this.jwtService.sign(userPayload);
+
+    return { message: `El usuario ${user.id} ha iniciado sesión`, token };
 
     //   const credentials = plainToInstance(AuthDto, authDto);
 
