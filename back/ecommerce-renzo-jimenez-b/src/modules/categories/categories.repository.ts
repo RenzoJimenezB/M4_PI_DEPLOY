@@ -29,6 +29,10 @@ export class CategoriesRepository {
     // Find existing categories in the database
     const existingCategories = await this.repository.find({
       where: { name: In(categoryNames) },
+      // In operator: matches values that are included within a specified list
+      // Allows to query records where a field matches any of the values in an array
+
+      // SELECT * FROM entity WHERE field IN('value_1', 'value_2', 'value_3')
     });
 
     // Extract the names of existing categories

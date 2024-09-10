@@ -5,14 +5,15 @@ import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 import { PublicUserDto } from './dto/public-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AdminUserDto } from './dto/admin-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
-  async getUsers(): Promise<PublicUserDto[]> {
+  async getUsers(): Promise<AdminUserDto[]> {
     const users = await this.usersRepository.findAll();
-    return plainToInstance(PublicUserDto, users);
+    return plainToInstance(AdminUserDto, users);
   }
 
   async getUserById(id: string): Promise<PublicUserDto> {

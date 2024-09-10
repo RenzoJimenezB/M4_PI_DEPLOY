@@ -34,7 +34,11 @@ export class AuthGuard implements CanActivate {
     try {
       const secret = process.env.JWT_SECRET;
       const payload = this.jwtService.verify(token, { secret });
-      // .verify returns the decoded payload of the JWT
+      // manually passing the secret for verification is optional
+      // the secret is already globally registered in JwtModule
+      // JwtService uses the secret set globally for both signing and verifying
+
+      // .verify() returns the decoded payload of the JWT
       // includes data that was encoded into the token when it was created
       // console.log(payload);
 
@@ -42,6 +46,7 @@ export class AuthGuard implements CanActivate {
       payload.exp = new Date(payload.exp * 1000).toLocaleString('es');
 
       request.user = payload;
+
       return true;
     } catch (error) {
       throw new UnauthorizedException('Invalid token');

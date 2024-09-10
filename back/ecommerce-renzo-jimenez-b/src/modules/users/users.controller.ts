@@ -35,7 +35,6 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Req() request: Request & { user: any },
   ) {
-    // console.log(`searching user with id: ${id}...`);
     // console.log(request.user);
 
     return this.usersService.getUserById(id);
