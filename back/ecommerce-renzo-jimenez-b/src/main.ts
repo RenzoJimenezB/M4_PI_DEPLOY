@@ -19,6 +19,8 @@ async function bootstrap() {
   app.use(loggerGlobal);
   app.useGlobalPipes(
     new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
       // exceptionFactory: (errors) => {
       //   const cleanErrors = errors.map((error) => {
       //     return {

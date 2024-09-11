@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const secret = process.env.JWT_SECRET;
-      const payload = this.jwtService.verify(token, { secret });
+      const tokenPayload = this.jwtService.verify(token, { secret });
       // manually passing the secret for verification is optional
       // the secret is already globally registered in JwtModule
       // JwtService uses the secret set globally for both signing and verifying
@@ -42,10 +42,11 @@ export class AuthGuard implements CanActivate {
       // includes data that was encoded into the token when it was created
       // console.log(payload);
 
-      payload.iat = new Date(payload.iat * 1000).toLocaleString('es');
-      payload.exp = new Date(payload.exp * 1000).toLocaleString('es');
+      tokenPayload.iat = new Date(tokenPayload.iat * 1000).toLocaleString('es');
+      tokenPayload.exp = new Date(tokenPayload.exp * 1000).toLocaleString('es');
 
-      request.user = payload;
+      console.log({ tokenPayload });
+      request.user = tokenPayload;
 
       return true;
     } catch (error) {

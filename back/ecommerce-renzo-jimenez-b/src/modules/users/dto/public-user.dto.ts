@@ -1,4 +1,4 @@
-import { Exclude, plainToInstance, Transform } from 'class-transformer';
+import { Exclude, Expose, plainToInstance, Transform } from 'class-transformer';
 import { PublicOrderDto } from 'src/modules/orders/dto/public-order.dto';
 
 export class PublicUserDto {
@@ -17,7 +17,7 @@ export class PublicUserDto {
   city: string;
   address: string;
 
-  @Exclude()
+  @Expose({ groups: ['admin'] })
   isAdmin: boolean;
 
   @Transform(({ value }) => plainToInstance(PublicOrderDto, value))

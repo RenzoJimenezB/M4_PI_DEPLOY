@@ -16,6 +16,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { Product } from './entities/products.entity';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from '../auth/enum/roles.enum';
 
 @Controller('products')
 export class ProductsController {
@@ -48,10 +51,12 @@ export class ProductsController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin) // is a user allowed to create an order?
+  @UseGuards(AuthGuard, RolesGuard)
   updateProduct(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateData: Partial<Product>,
+    // UpdateProductDto (a PartialType(CreateProductDto))?
   ) {
     return this.productsService.updateProduct(id, updateData);
   }

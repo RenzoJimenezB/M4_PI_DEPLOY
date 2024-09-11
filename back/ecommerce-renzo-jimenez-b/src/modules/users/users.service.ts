@@ -5,15 +5,16 @@ import { plainToInstance } from 'class-transformer';
 import { validateData } from 'src/helpers/validateData';
 import { PublicUserDto } from './dto/public-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AdminUserDto } from './dto/admin-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
-  async getUsers(): Promise<AdminUserDto[]> {
+  async getUsers(): Promise<PublicUserDto[]> {
     const users = await this.usersRepository.findAll();
-    return plainToInstance(AdminUserDto, users);
+    return plainToInstance(PublicUserDto, users, { groups: ['admin'] });
+    // { groups } expects an array of strings, representing different contexts
+    // or roles for which you want to apply transformation for certain fields
   }
 
   async getUserById(id: string): Promise<PublicUserDto> {

@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEmail,
   IsEmpty,
   IsInt,
@@ -65,6 +66,7 @@ export class CreateUserDto {
   city: string;
 
   @IsEmpty()
+  // @IsBoolean()
   isAdmin: boolean;
 
   @IsNotEmpty()

@@ -16,6 +16,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from '../auth/enum/roles.enum';
 
 @Controller('users')
 export class UsersController {
@@ -23,7 +26,8 @@ export class UsersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   findAll() {
     return this.usersService.getUsers();
   }
