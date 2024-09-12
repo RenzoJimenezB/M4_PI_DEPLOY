@@ -19,6 +19,7 @@ import { Product } from './entities/products.entity';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from '../auth/enum/roles.enum';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -44,19 +45,19 @@ export class ProductsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   create(@Body() product: CreateProductDto) {
     return this.productsService.createProduct(product);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  @Roles(Role.Admin) // is a user allowed to create an order?
+  @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)
   updateProduct(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateData: Partial<Product>,
-    // UpdateProductDto (a PartialType(CreateProductDto))?
+    @Body() updateData: UpdateProductDto,
   ) {
     return this.productsService.updateProduct(id, updateData);
   }

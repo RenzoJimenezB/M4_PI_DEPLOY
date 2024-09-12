@@ -13,6 +13,7 @@ import { CategoriesRepository } from '../categories/categories.repository';
 import * as data from 'src/utils/data.json';
 import { ProductIdDto } from './dto/product-id.dto';
 import { ProcessedProductsDto } from './dto/processed-products-dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsRepository {
@@ -89,14 +90,12 @@ export class ProductsRepository {
       .execute();
   }
 
-  async create(product: CreateProductDto): Promise<string> {
-    const category = await this.categoriesRepository.findByName(
-      product.category,
-    );
+  async create(product: CreateProductDto): Promise<Partial<Product>> {
+    const category = await this.categoriesRepository.findById(product.category);
 
     if (!category) {
       throw new NotFoundException(
-        `Category with name ${product.category} not found`,
+        `Category with ID ${product.category} not found`,
       );
     }
 
@@ -115,7 +114,7 @@ export class ProductsRepository {
       category,
     });
 
-    return newProduct.id;
+    return { id: newProduct.id };
   }
 
   async updateProduct(
@@ -133,7 +132,10 @@ export class ProductsRepository {
 
     await repository.update(id, updateData);
 
-    const updatedProduct = await repository.findOneBy({ id });
+    const updatedProduct = await repository.findOne({
+      where: { id },
+      relations: { category: true },
+    });
 
     // const product = await this.repository.findOneBy({ id });
 
@@ -142,7 +144,7 @@ export class ProductsRepository {
     //   await this.repository.save(product);
     // }
 
-    console.log(`Product with id ${id} has been updated`);
+    console.log(`Product with ID ${id} has been updated`);
     return updatedProduct;
   }
 

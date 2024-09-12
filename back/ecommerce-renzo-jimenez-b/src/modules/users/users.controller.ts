@@ -40,15 +40,8 @@ export class UsersController {
     @Req() request: Request & { user: any },
   ) {
     // console.log(request.user);
-
     return this.usersService.getUserById(id);
   }
-
-  // @Post()
-  // @HttpCode(HttpStatus.CREATED)
-  // create(@Body() user: CreateUserDto) {
-  //   return this.usersService.createUser(user);
-  // }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)

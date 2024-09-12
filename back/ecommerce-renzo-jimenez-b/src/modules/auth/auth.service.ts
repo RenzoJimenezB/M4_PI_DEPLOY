@@ -16,10 +16,6 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  getAuth() {
-    return 'Get auth';
-  }
-
   async signUp(user: CreateUserDto): Promise<PublicUserDto> {
     const dbUser = await this.usersRepository.findByEmail(user.email);
     if (dbUser) {
@@ -63,7 +59,11 @@ export class AuthService {
 
     const token = this.jwtService.sign(userPayload);
 
-    return { message: `El usuario ${user.id} ha iniciado sesión`, token };
+    return {
+      message: `El usuario ${user.id} ha iniciado sesión`,
+      roles: userPayload.roles,
+      token,
+    };
 
     //   const credentials = plainToInstance(AuthDto, authDto);
 

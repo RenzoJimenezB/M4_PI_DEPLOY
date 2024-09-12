@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
+  IsUUID,
   MaxLength,
 } from 'class-validator';
 
@@ -31,5 +32,6 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsUUID()
   category: string;
 }

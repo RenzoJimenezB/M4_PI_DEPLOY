@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { plainToInstance } from 'class-transformer';
 import { CreateProductDto } from './dto/create-product.dto';
 import { validateData } from 'src/helpers/validateData';
 import { Product } from './entities/products.entity';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { CategoriesRepository } from '../categories/categories.repository';
+import { Category } from '../categories/entities/categories.entity';
 
 @Injectable()
 export class ProductsService {
-  constructor(private productsRepository: ProductsRepository) {}
+  constructor(
+    private productsRepository: ProductsRepository,
+    private categoriesRepository: CategoriesRepository,
+  ) {}
 
   async getProducts(
     page: number,
@@ -38,8 +44,26 @@ export class ProductsService {
     // }
   }
 
-  async updateProduct(id: string, updateData: Partial<Product>) {
-    return this.productsRepository.updateProduct(id, updateData);
+  async updateProduct(id: string, updateData: UpdateProductDto) {
+    let dbCategory: Category | undefined = undefined;
+
+    if (updateData.category) {
+      const category = await this.categoriesRepository.findById(
+        updateData.category,
+      );
+
+      if (!category) {
+        throw new NotFoundException(
+          `Category with ID ${updateData.category} not found`,
+        );
+      }
+      dbCategory = category;
+    }
+
+    return this.productsRepository.updateProduct(id, {
+      ...updateData,
+      category: dbCategory,
+    });
   }
 
   // deleteProduct(id: number) {
