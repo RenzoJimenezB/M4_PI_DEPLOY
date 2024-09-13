@@ -16,7 +16,7 @@ export class Order {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'timestamptz' })
   date: Date;
 
   @BeforeInsert()
