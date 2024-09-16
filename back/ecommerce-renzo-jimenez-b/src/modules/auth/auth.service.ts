@@ -38,13 +38,13 @@ export class AuthService {
   async signIn(email: string, password: string) {
     const user = await this.usersRepository.findByEmail(email);
 
+    if (!user) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    // if (!user || user?.password !== password) {
-    //   throw new BadRequestException('Email o password incorrectos');
-    // }
-
-    if (!user || !isPasswordValid) {
+    if (!isPasswordValid) {
       throw new BadRequestException('Invalid credentials');
     }
 

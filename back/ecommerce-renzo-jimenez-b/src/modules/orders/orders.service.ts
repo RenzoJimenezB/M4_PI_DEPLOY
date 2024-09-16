@@ -4,29 +4,24 @@ import { plainToInstance } from 'class-transformer';
 import { OrdersRepository } from './orders.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { validateData } from 'src/helpers/validateData';
+import { PublicOrderDto } from './dto/public-order.dto';
 
 @Injectable()
 export class OrdersService {
   constructor(private ordersRepository: OrdersRepository) {}
 
-  findAll() {
-    return this.ordersRepository.findAll();
+  async findAll() {
+    const orders = await this.ordersRepository.findAll();
+    return plainToInstance(PublicOrderDto, orders);
   }
 
-  getOrder(id: string): Promise<Order> {
-    return this.ordersRepository.findById(id);
+  async getOrder(id: string): Promise<PublicOrderDto> {
+    const order = await this.ordersRepository.findById(id);
+    return plainToInstance(PublicOrderDto, order);
   }
 
-  async addOrder(order: CreateOrderDto): Promise<Order> {
-    return this.ordersRepository.create(order);
-
-    //   const orderDto = plainToInstance(CreateOrderDto, order);
-
-    //   try {
-    //     await validateData(orderDto);
-    //     return this.ordersRepository.create(orderDto);
-    //   } catch (error) {
-    //     throw error;
-    //   }
+  async addOrder(order: CreateOrderDto): Promise<PublicOrderDto> {
+    const newOrder = await this.ordersRepository.create(order);
+    return plainToInstance(PublicOrderDto, newOrder);
   }
 }

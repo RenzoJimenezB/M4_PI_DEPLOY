@@ -42,8 +42,6 @@ export class OrdersRepository {
   }
 
   async create(order: CreateOrderDto): Promise<Order> {
-    // console.log('Is connection established?', this.dataSource.isInitialized);
-
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
