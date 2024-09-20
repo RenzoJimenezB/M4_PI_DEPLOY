@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 // import { v4 as uuid } from 'uuid';
-import { User } from 'src/modules/users/entities/users.entity';
-import { OrderDetail } from 'src/modules/orderDetails/entities/orderDetails.entity';
+import { User } from '../../users/entities/users.entity';
+import { OrderDetail } from '../../orderDetails/entities/orderDetails.entity';
 
 @Entity({ name: 'orders' })
 export class Order {

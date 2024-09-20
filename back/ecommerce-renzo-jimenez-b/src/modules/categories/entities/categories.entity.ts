@@ -1,5 +1,5 @@
-import { Product } from 'src/modules/products/entities/products.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from '../../products/entities/products.entity';
 // import { v4 as uuid } from 'uuid';
 
 @Entity({

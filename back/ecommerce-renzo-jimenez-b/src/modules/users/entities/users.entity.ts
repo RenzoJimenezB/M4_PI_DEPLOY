@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Order } from 'src/modules/orders/entities/orders.entity';
+import { Order } from '../../orders/entities/orders.entity';
 // import { v4 as uuid } from 'uuid';
 
 @Entity({
