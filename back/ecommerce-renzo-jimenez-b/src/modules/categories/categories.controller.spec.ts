@@ -4,7 +4,7 @@ import { CategoriesService } from './categories.service';
 
 describe('CategoriesController', () => {
   let controller: CategoriesController;
-  let mockCategoriesService: Partial<CategoriesService>;
+  let mockCategoriesService: Partial<jest.Mocked<CategoriesService>>;
 
   beforeEach(async () => {
     mockCategoriesService = {
@@ -14,7 +14,6 @@ describe('CategoriesController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CategoriesController],
       providers: [
-        CategoriesService,
         { provide: CategoriesService, useValue: mockCategoriesService },
       ],
     }).compile();

@@ -1,5 +1,5 @@
 import { Exclude, Expose, plainToInstance, Transform } from 'class-transformer';
-import { PublicOrderDto } from 'src/modules/orders/dto/public-order.dto';
+import { PublicOrderDto } from '../../orders/dto/public-order.dto';
 
 export class PublicUserDto {
   id: string;

@@ -10,7 +10,7 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
-import { Match } from 'src/helpers/match.decorator';
+import { Match } from '../../../helpers/match.decorator';
 
 export class CreateUserDto {
   @IsNotEmpty()

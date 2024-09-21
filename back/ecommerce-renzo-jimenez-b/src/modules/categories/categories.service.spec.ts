@@ -4,13 +4,11 @@ import { CategoriesRepository } from './categories.repository';
 
 describe('CategoriesService', () => {
   let service: CategoriesService;
-  let mockCategoriesRepository: Partial<CategoriesRepository>;
+  let mockCategoriesRepository: Partial<jest.Mocked<CategoriesRepository>>;
 
   beforeEach(async () => {
     mockCategoriesRepository = {
       findAll: jest.fn().mockResolvedValue([]),
-      //   findById: jest.fn(),
-      //   findByName: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -25,5 +23,10 @@ describe('CategoriesService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('findAll should be defined', () => {
+    expect(mockCategoriesRepository.findAll).toBeDefined();
+    expect(typeof mockCategoriesRepository.findAll).toBe('function');
   });
 });
