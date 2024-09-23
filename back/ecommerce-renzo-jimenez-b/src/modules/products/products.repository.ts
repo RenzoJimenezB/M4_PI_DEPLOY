@@ -10,7 +10,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { Product } from './entities/products.entity';
 import { PaginatedProductsDto } from './dto/paginated-products.dto';
 import { CategoriesRepository } from '../categories/categories.repository';
-import * as data from 'src/utils/data.json';
+import * as data from '../../utils/data.json';
 import { ProductIdDto } from './dto/product-id.dto';
 import { ProcessedProductsDto } from './dto/processed-products-dto';
 import { UpdateProductDto } from './dto/update-product.dto';

@@ -17,7 +17,7 @@ import { ProductsService } from './products.service';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { Product } from './entities/products.entity';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from 'src/decorators/roles.decorator';
+import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../auth/enum/roles.enum';
 import { UpdateProductDto } from './dto/update-product.dto';
 

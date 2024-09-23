@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let mockUsersService: Partial<UsersService>;
+  let mockUsersService: Partial<jest.Mocked<UsersService>>;
   let mockJwtService: Partial<JwtService>;
 
   beforeEach(async () => {
