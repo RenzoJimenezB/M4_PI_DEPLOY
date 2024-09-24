@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsEmail,
   IsEmpty,
   IsInt,
@@ -11,17 +10,25 @@ import {
   MaxLength,
 } from 'class-validator';
 import { Match } from '../../../helpers/match.decorator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
+  @ApiProperty({
+    required: true,
+    description: 'The name must be at least 3 characters long',
+    example: 'Name',
+  })
   @IsNotEmpty()
   @IsString()
   @Length(3, 80)
   name: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @MaxLength(15)
@@ -51,6 +58,10 @@ export class CreateUserDto {
   })
   passwordConfirmation: string;
 
+  /**
+   *
+   * @example
+   */
   @IsNotEmpty()
   @IsInt()
   phone: number;

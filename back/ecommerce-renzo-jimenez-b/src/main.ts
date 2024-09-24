@@ -4,6 +4,7 @@ import { loggerGlobal } from './middleware/logger.middleware';
 import { CategoriesService } from './modules/categories/categories.service';
 import { ProductsService } from './modules/products/products.service';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,16 @@ async function bootstrap() {
   // Call methods on the retrieved services
   await categoriesService.addCategories();
   await productsService.addProducts();
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('M4 Ecommerce API')
+    .setDescription('M4 API Documentation')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
 
   app.use(loggerGlobal);
   app.useGlobalPipes(

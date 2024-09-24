@@ -14,8 +14,6 @@ export class FilesService {
   constructor(
     private filesRepository: FilesRepository,
     private productsRepository: ProductsRepository,
-
-    // @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
   async uploadImage(productId: string, file: Express.Multer.File) {
