@@ -14,21 +14,24 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @ApiProperty({
-    required: true,
-    description: 'The name must be at least 3 characters long',
-    example: 'Name',
+    description: 'name must be at least 3 characters long',
   })
   @IsNotEmpty()
   @IsString()
   @Length(3, 80)
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'email must be a valid email address',
+  })
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description:
+      'at least 1 uppercase letter, 1 lowercase letter, 1 digit and 1 special character',
+  })
   @IsNotEmpty()
   @IsString()
   @MaxLength(15)
@@ -51,6 +54,9 @@ export class CreateUserDto {
   // })
   password: string;
 
+  @ApiProperty({
+    description: 'should match password',
+  })
   @IsNotEmpty()
   @IsString()
   @Match('password', {
@@ -59,27 +65,40 @@ export class CreateUserDto {
   passwordConfirmation: string;
 
   /**
-   *
-   * @example
+   * Provided as integer
+   * @example 987654321
    */
   @IsNotEmpty()
   @IsInt()
   phone: number;
 
+  @ApiProperty({
+    description: 'country must be at least 5 characters long',
+  })
   @IsNotEmpty()
   @IsString()
   @Length(5, 20)
   country: string;
 
+  @ApiProperty({
+    description: 'city must be at least 5 characters long',
+  })
   @IsNotEmpty()
   @IsString()
   @Length(5, 20)
   city: string;
 
+  @ApiProperty({
+    description: 'This field should be empty: value is assigned by default',
+    default: false,
+  })
   @IsEmpty()
   // @IsBoolean()
   isAdmin: boolean;
 
+  @ApiProperty({
+    description: 'address must be at least 3 characters long',
+  })
   @IsNotEmpty()
   @IsString()
   @Length(3, 80)
