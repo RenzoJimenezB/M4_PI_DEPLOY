@@ -64,20 +64,5 @@ export class AuthService {
       roles: userPayload.roles,
       token,
     };
-
-    //   const credentials = plainToInstance(AuthDto, authDto);
-
-    //   try {
-    //     await validateData(credentials);
-    //     const user = await this.usersRepository.findByEmail(credentials.email);
-
-    //     if (!user || user?.password !== password) {
-    //       throw new BadRequestException('Email o password incorrectos');
-    //     }
-
-    //     return user;
-    //   } catch (error) {
-    //     throw error;
-    //   }
   }
 }

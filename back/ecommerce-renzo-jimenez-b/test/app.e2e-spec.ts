@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  let mockUsersRepository: Partial<UsersRepository>;
+  let mockUsersRepository: Partial<jest.Mocked<UsersRepository>>;
   let jwtService: JwtService;
 
   const mockUser: Partial<User> = {
