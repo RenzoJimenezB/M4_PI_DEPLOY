@@ -1,8 +1,6 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: renzojimenezb/m4_api
     container_name: nest-app
     ports:
       - '3000:3000'
