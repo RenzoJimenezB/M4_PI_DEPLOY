@@ -1,6 +1,7 @@
 services:
   app:
     image: renzojimenezb/m4_api
+    platform: linux/amd64
     container_name: nest-app
     ports:
       - '3000:3000'
