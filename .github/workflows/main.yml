@@ -25,7 +25,7 @@ jobs:
       name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: .
+        context: ./ecommerce-renzo-jimenez-b
         file: ./ecommerce-renzo-jimenez-b/Dockerfile
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/m4_api:latest
