@@ -28,4 +28,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/M4_PI:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/m4_api:latest
